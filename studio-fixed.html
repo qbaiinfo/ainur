@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Мазмұн студиясы</title>
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{--ink:#1B2B27;--evergreen:#2C5F55;--evergreen-deep:#20463F;--sage:#7FA396;--mist:#E7EFE9;--mist-2:#F0F5F0;--paper:#FAF8F3;--honey:#CE9A3B;--honey-soft:#E8CE97;--line:#DCE4DD;--shadow:0 18px 50px -24px rgba(27,43,39,.35);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;font-size:16px;line-height:1.6;}
+  h1,h2,h3{font-family:"Spectral",serif;font-weight:500;margin:0;}
+  a{color:var(--evergreen);}
+  #lockScreen{position:fixed;inset:0;background:linear-gradient(135deg,#2C5F55,#20463F);display:flex;align-items:center;justify-content:center;z-index:999;}
+  #lockScreen.hidden{display:none;}
+  .lock-card{background:#fff;border-radius:22px;padding:44px 36px;max-width:420px;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.4);}
+  .lock-card .logo{font-size:3.2rem;margin-bottom:16px;}
+  .lock-card h2{color:#2C5F55;font-size:1.6rem;margin:0 0 8px;}
+  .lock-card p{color:#666;margin:0 0 24px;font-size:.95rem;}
+  .lock-card input{width:100%;padding:12px 16px;border:1.5px solid #ddd;border-radius:12px;font-size:1rem;margin-bottom:12px;font-family:inherit;}
+  .lock-card input:focus{outline:none;border-color:#2C5F55;}
+  .lock-card button{width:100%;padding:12px;background:#2C5F55;color:#fff;border:0;border-radius:12px;font-weight:600;cursor:pointer;font-size:1rem;}
+  .lock-card .err{display:none;color:#8a2b2b;background:#fdecec;border:1px solid #f3b6b6;padding:.8em;border-radius:10px;margin-bottom:12px;font-size:.9rem;}
+  .lock-card .err.show{display:block;}
+  #studio{opacity:1;transition:opacity .3s;}
+  #studio.locked{opacity:0;pointer-events:none;}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 22px;}
+  .top{background:rgba(250,248,243,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;}
+  .top-in{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .brand{display:flex;align-items:center;gap:.55em;font-family:"Spectral";font-weight:600;font-size:1.05rem;}
+  .back{font-size:.9rem;font-weight:600;text-decoration:none;}
+  .hero{padding:40px 0 8px;}
+  .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--evergreen);}
+  .hero h1{font-size:clamp(1.8rem,4vw,2.6rem);margin:.35em 0;}
+  .hero p{color:#4a5a55;max-width:60ch;}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);margin-top:24px;}
+  label{display:block;font-size:.82rem;font-weight:600;color:#20463F;margin-bottom:6px;}
+  textarea,input,select{width:100%;padding:.75em .9em;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:.98rem;color:var(--ink);background:var(--paper);}
+  textarea:focus,input:focus,select:focus{outline:none;border-color:var(--evergreen);}
+  textarea{resize:vertical;min-height:90px;}
+  .row{display:grid;grid-template-columns:1fr 200px;gap:14px;align-items:end;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font-weight:600;font-size:1rem;padding:.8em 1.4em;border-radius:100px;border:0;cursor:pointer;font-family:inherit;}
+  .btn-primary{background:var(--evergreen);color:#fff;width:100%;}
+  .btn-primary:hover{background:var(--evergreen-deep);}
+  .btn-primary:disabled{opacity:.6;cursor:wait;}
+  .btn-honey{background:var(--honey);color:#2B2410;padding:.7em 1.2em;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--mist-2);border:1px solid var(--line);border-radius:100px;padding:.4em .9em;font-size:.85rem;font-weight:600;color:#20463F;cursor:pointer;}
+  .chip:hover{background:var(--evergreen);color:#fff;}
+  .hint{font-size:.82rem;color:var(--sage);margin-top:10px;}
+  .sec-title{font-family:"Spectral";font-size:1.35rem;margin:34px 0 14px;}
+  .out{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;position:relative;}
+  .out h3{font-size:1.2rem;margin-bottom:.5em;}
+  .out .body{white-space:pre-wrap;color:#33433e;font-size:.98rem;}
+  .copy{position:absolute;top:14px;right:14px;}
+  .platforms{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;}
+  .pcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;}
+  .pcard .ph{display:flex;align-items:center;gap:.5em;font-weight:700;font-size:.95rem;margin-bottom:12px;}
+  .pcard .body{white-space:pre-wrap;font-size:.92rem;color:#33433e;flex:1;}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+  .tag{background:var(--mist-2);border:1px solid var(--line);border-radius:8px;padding:.3em .7em;font-size:.82rem;color:#20463F;}
+  .err{display:none;color:#8a2b2b;background:#fdecec;border:1px solid #f3b6b6;padding:.8em;border-radius:10px;margin-top:14px;font-size:.9rem;}
+  .err.show{display:block;}
+  .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #results{display:none;}
+  .image-section{margin-top:30px;text-align:center;}
+  .image-section img{max-width:100%;height:auto;border-radius:16px;box-shadow:var(--shadow);}
+  @media(max-width:820px){.row{grid-template-columns:1fr;}.platforms{grid-template-columns:1fr;}}
+  @media(max-width:560px){section{padding:56px 0 !important;}}
+</style>
+</head>
+<body>
+
+<div id="lockScreen">
+  <div class="lock-card">
+    <div class="logo">🔐</div>
+    <h2>Мазмұн студиясы</h2>
+    <p>Ainur ғана кіре алады</p>
+    <div class="err" id="lockErr"></div>
+    <input id="passInput" type="password" placeholder="Шифрені енгізіңіз…" onkeydown="if(event.key==='Enter')checkPass()" autofocus />
+    <button onclick="checkPass()">Кіру</button>
+  </div>
+</div>
+
+<div id="studio" class="locked">
+  <div class="top">
+    <div class="wrap top-in">
+      <span class="brand">📝 Мазмұн студиясы</span>
+      <a class="back" href="index.html">← Сайтқа оралу</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <span class="eyebrow">Тек ішкі қолданысқа</span>
+      <h1>Бір тақырыптан — толық мазмұн</h1>
+      <p>Тақырыпты жазыңыз. AI сізге блог мақаласын, әлеуметтік желі мәтіндері және брендке сай сурет дайындап береді.</p>
+    </div>
+
+    <div class="panel">
+      <div class="row">
+        <div>
+          <label for="topic">Тақырып</label>
+          <textarea id="topic" placeholder="Мысалы: EMDR терапиясы дегеніміз не?"></textarea>
+        </div>
+        <div>
+          <label for="tone">Стиль</label>
+          <select id="tone">
+            <option value="жылы әрі қолдаушы">Жылы әрі қолдаушы</option>
+            <option value="ақпараттық">Ақпараттық</option>
+            <option value="шабыттандырушы">Шабыттандырушы</option>
+          </select>
+          <div style="height:12px"></div>
+          <button class="btn btn-primary" id="genBtn" onclick="generate()">✨ AI-мен жасау</button>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip" onclick="setTopic(this)">Мазасыздықпен күресудің 5 әдісі</span>
+        <span class="chip" onclick="setTopic(this)">Өзіне сенімділікті қалай арттыруға болады</span>
+        <span class="chip" onclick="setTopic(this)">EMDR терапиясы дегеніміз не?</span>
+        <span class="chip" onclick="setTopic(this)">Күйзелістен шығу жолдары</span>
+      </div>
+      <div class="hint">💡 Тақырып нақтырақ болса, мазмұн да сапалырақ шығады.</div>
+      <div class="err" id="err"></div>
+    </div>
+
+    <div id="results" style="display:none;">
+      <div class="sec-title">📝 Блог мақаласы</div>
+      <div class="out">
+        <button class="btn btn-honey copy" onclick="copyText('blogBody',this)">Көшіру</button>
+        <h3 id="blogTitle"></h3>
+        <div class="body" id="blogBody"></div>
+      </div>
+
+      <div class="sec-title">📣 Әлеуметтік желілерге</div>
+      <div class="platforms">
+        <div class="pcard">
+          <div class="ph">📷 Instagram</div>
+          <div class="body" id="igBody"></div>
+          <button class="btn btn-honey" style="margin-top:12px" onclick="copyText('igBody',this)">Көшіру</button>
+        </div>
+        <div class="pcard">
+          <div class="ph">♪ TikTok</div>
+          <div class="body" id="ttBody"></div>
+          <button class="btn btn-honey" style="margin-top:12px" onclick="copyText('ttBody',this)">Көшіру</button>
+        </div>
+        <div class="pcard">
+          <div class="ph">f Facebook</div>
+          <div class="body" id="fbBody"></div>
+          <button class="btn btn-honey" style="margin-top:12px" onclick="copyText('fbBody',this)">Көшіру</button>
+        </div>
+      </div>
+      <div class="tags" id="tags"></div>
+
+      <div class="sec-title">🎨 Сурет</div>
+      <div class="image-section">
+        <picture>
+          <source media="(min-width: 1024px)" srcset="" type="image/webp" id="srcDesktop">
+          <source media="(min-width: 768px)" srcset="" type="image/webp" id="srcTablet">
+          <source media="(min-width: 480px)" srcset="" type="image/webp" id="srcMobile">
+          <img id="themeImage" alt="Theme illustration" style="max-width: 600px; width: 100%; border-radius: 16px; box-shadow: 0 10px 30px -12px rgba(27,43,39,0.5);" loading="lazy">
+        </picture>
+        <button class="btn btn-honey" style="margin-top:16px" onclick="randomImage()">🔄 Басқа сурет</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STUDIO_PASSWORD = "ainur2024";
+function checkPass(){
+  const p = document.getElementById('passInput').value;
+  if(p === STUDIO_PASSWORD){
+    document.getElementById('lockScreen').classList.add('hidden');
+    document.getElementById('studio').classList.remove('locked');
+  } else {
+    document.getElementById('lockErr').textContent = 'Шифр қате';
+    document.getElementById('lockErr').classList.add('show');
+    document.getElementById('passInput').value = '';
+  }
+}
+
+const $ = id => document.getElementById(id);
+function setTopic(el){ $('topic').value = el.textContent; $('topic').focus(); }
+function copyText(id, btn){
+  const txt = $(id).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const o = btn.textContent;
+    btn.textContent = '✓ Көшірілді';
+    setTimeout(() => btn.textContent = o, 1400);
+  });
+}
+
+function updateImage(theme) {
+  const num = Math.floor(Math.random() * 3) + 1;
+  const base = `/images/${theme}/${theme}-${num}`;
+  
+  document.getElementById('srcDesktop').srcset = `${base}-desktop.webp`;
+  document.getElementById('srcTablet').srcset = `${base}-tablet.webp`;
+  document.getElementById('srcMobile').srcset = `${base}-mobile.webp`;
+  document.getElementById('themeImage').src = `${base}-mobile.webp`;
+  document.getElementById('themeImage').alt = `${theme} theme illustration`;
+}
+
+function randomImage() {
+  const themes = ['lotus', 'eye', 'therapist', 'family', 'growth', 'hope'];
+  const theme = themes[Math.floor(Math.random() * themes.length)];
+  updateImage(theme);
+}
+
+async function generate(){
+  const topic = $('topic').value.trim();
+  const tone = $('tone').value;
+  if(!topic){ alert('Тақырып жазыңыз'); return; }
+
+  const btn = $('genBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Жасалуда…';
+  $('err').classList.remove('show');
+
+  const sys = `Сен — Айнұр Қажымұқан психолог-кеңесшінің мазмұн көмекшісің. Барлық мәтінді ҚАЗАҚ тілінде жаз. Психология тақырыбына сай — жылы, ғылыми негізделген, қарапайым тілде. Диагноз қойма, дәрі ұсынба.`;
+
+  try {
+    const res = await fetch("/api/studio", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic: topic, tone: tone, system: sys })
+    });
+
+    if(!res.ok){
+      const errData = await res.json().catch(()=>({error:'API '+res.status}));
+      throw new Error(errData.error || `API ${res.status}`);
+    }
+    
+    const j = await res.json();
+    render(j);
+  } catch(e){
+    $('err').textContent = `Қате: ${e.message}`;
+    $('err').classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✨ AI-мен жасау';
+  }
+}
+
+function render(j){
+  $('blogTitle').textContent = j.blog?.title || '';
+  $('blogBody').textContent = j.blog?.body || '';
+  $('igBody').textContent = j.instagram || '';
+  $('ttBody').textContent = j.tiktok || '';
+  $('fbBody').textContent = j.facebook || '';
+  
+  const tags = $('tags');
+  tags.innerHTML = '';
+  (j.hashtags || []).forEach(h => {
+    const s = document.createElement('span');
+    s.className = 'tag';
+    s.textContent = h;
+    tags.appendChild(s);
+  });
+  
+  const theme = j.imageTheme || 'lotus';
+  updateImage(theme);
+  
+  $('results').style.display = 'block';
+  $('results').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

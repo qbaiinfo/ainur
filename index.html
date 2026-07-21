@@ -10,23 +10,21 @@
 <meta name="keywords" content="психолог Алматы, EMDR терапиясы, психолог қазақша, когнитивті мінез-құлық терапиясы, мазасыздық, депрессия, отбасылық психолог, онлайн психолог, психолог-кеңесші" />
 <meta name="robots" content="index, follow" />
 <meta name="author" content="Айнұр Қажымұқан" />
-<link rel="canonical" href="https://example.kz/" />
 
-<!-- Open Graph (WhatsApp / Instagram / Facebook сілтемесі әдемі көрінуі үшін) -->
+<!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="kk_KZ" />
 <meta property="og:title" content="Айнұр Қажымұқан — Педагог-психолог | EMDR және CBT" />
 <meta property="og:description" content="EMDR, когнитивті-мінез-құлық терапиясы және басқа да ғылыми әдістер. Онлайн және кабинетте, қазақ тілінде." />
-<meta property="og:url" content="https://example.kz/" />
+<meta property="og:image" content="ainur.jpg" />
 
-<!-- Favicon (логотип белгісі) -->
+<!-- Favicon -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232C5F55'/%3E%3Cpath d='M16 24c0-5 0-8 0-8m0 0c-3-1-5-3-5-6 3 0 5 2 5 4m0 2c3-1 5-3 5-6-3 0-5 2-5 4' stroke='%23CE9A3B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-<!-- Google үшін құрылымдық дерек (жергілікті бизнес) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -35,8 +33,7 @@
   "description": "Педагог-психолог, EMDR және CBT терапевті. Балаларға ойын терапиясы. Онлайн және кабинетте қабылдау.",
   "areaServed": "Алматы, Қазақстан",
   "availableLanguage": ["kk", "tr"],
-  "medicalSpecialty": "Psychiatric",
-  "url": "https://example.kz/"
+  "image": "ainur.jpg"
 }
 </script>
 
@@ -138,9 +135,20 @@
   .section-head h2{margin:.5em 0 .4em;}
   .section-head p{color:#4a5a55;}
 
-  /* ---------- About ---------- */
+  /* ---------- About + PHOTO 3D ---------- */
   .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center;}
-  .about-portrait{background:var(--mist);border-radius:24px;padding:26px;position:relative;overflow:hidden;}
+  .about-portrait{background:var(--mist);border-radius:24px;padding:26px;position:relative;overflow:visible;}
+  .photo-3d{perspective:900px;}
+  .portrait-img{
+    width:100%;border-radius:18px;display:block;
+    transition:transform .25s ease;transform-style:preserve-3d;
+    box-shadow:0 24px 60px -20px rgba(27,43,39,.45);
+    animation:photoIn 1s ease both;
+  }
+  @keyframes photoIn{from{opacity:0;transform:translateY(24px) scale(.96);}to{opacity:1;transform:translateY(0) scale(1);}}
+  .photo-ring{position:absolute;inset:0;margin:auto;width:88%;aspect-ratio:1;border-radius:50%;
+    border:1.5px solid var(--honey-soft);opacity:.45;animation:breathe 7s ease-in-out infinite;pointer-events:none;z-index:1;}
+  .photo-ring.r2{width:100%;animation-delay:.5s;opacity:.25;}
   .about-text p{color:#3d4d48;margin-bottom:1.1em;}
   .creds{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;}
   .cred{background:var(--paper-2);border:1px solid var(--line);border-radius:100px;padding:.5em 1.05em;font-size:.88rem;font-weight:600;color:var(--evergreen-deep);display:inline-flex;gap:.5em;align-items:center;}
@@ -202,7 +210,7 @@
   form.book .btn{width:100%;justify-content:center;margin-top:6px;}
   .form-note{font-size:.8rem;color:var(--sage);text-align:center;margin-top:12px;}
 
-  /* ---------- Contact / footer ---------- */
+  /* ---------- Footer ---------- */
   footer{background:var(--ink);color:#cdd8d3;padding:64px 0 32px;}
   .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;margin-bottom:40px;}
   .foot-brand{display:flex;align-items:center;gap:.6em;font-family:"Spectral";font-size:1.2rem;color:#fff;margin-bottom:.7em;}
@@ -256,6 +264,7 @@
     .nav-links.open{display:flex;}
     .burger{display:block;}
     .nav-cta .btn-ghost{display:none;}
+    .about-portrait{max-width:380px;margin-inline:auto;}
   }
   @media(max-width:560px){
     .cards{grid-template-columns:1fr;}
@@ -266,7 +275,6 @@
     .hero-lead{max-width:none;}
     .hero-cta .btn{width:100%;justify-content:center;}
     .strip-inner{flex-direction:column;gap:10px;align-items:flex-start;padding:18px 24px;}
-    .about-portrait{max-width:320px;margin-inline:auto;}
     form.book{padding:22px 18px;}
     .fmt{grid-template-columns:1fr;}
     .hours-row{flex-direction:column;gap:2px;}
@@ -325,7 +333,6 @@
     <div class="hero-art" aria-hidden="true">
       <div class="breath-ring r2"></div>
       <div class="breath-ring"></div>
-      <!-- Vector illustration: lotus, sun and gentle botanicals (calm, no figures) -->
       <svg viewBox="0 0 440 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Тыныштық — лотос пен күн">
         <defs>
           <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -342,20 +349,13 @@
 
         <circle cx="220" cy="216" r="176" fill="url(#bg)"/>
         <g clip-path="url(#ring)">
-          <!-- soft layered background -->
           <circle cx="120" cy="360" r="150" fill="#D6E3D9" opacity=".5"/>
           <circle cx="340" cy="100" r="120" fill="#F3EAD6" opacity=".6"/>
-
-          <!-- rising sun -->
           <circle cx="220" cy="160" r="44" fill="#E8CE97"/>
           <circle cx="220" cy="160" r="62" fill="none" stroke="#CE9A3B" stroke-width="1.5" opacity=".45"/>
           <circle cx="220" cy="160" r="80" fill="none" stroke="#CE9A3B" stroke-width="1" opacity=".22"/>
-
-          <!-- gentle hills -->
           <path d="M20 300 Q120 258 240 292 T420 284 L420 440 L20 440 Z" fill="#CFE0D4" opacity=".8"/>
           <path d="M20 330 Q140 296 260 324 T420 318 L420 440 L20 440 Z" fill="#B9D0C2" opacity=".7"/>
-
-          <!-- lotus -->
           <g transform="translate(220 306)">
             <path d="M0 8 C-16 -12 -16 -46 0 -66 C16 -46 16 -12 0 8z" fill="url(#petal2)"/>
             <path d="M-8 6 C-34 -6 -46 -30 -44 -56 C-20 -48 -6 -28 -4 -6z" fill="url(#petal1)"/>
@@ -364,15 +364,11 @@
             <path d="M14 10 C46 6 66 -8 74 -28 C46 -28 24 -16 12 2z" fill="#7FA396" opacity=".85"/>
             <ellipse cx="0" cy="14" rx="86" ry="10" fill="#20463F" opacity=".14"/>
           </g>
-
-          <!-- floating leaves & seeds -->
           <path d="M118 120 q-20 -4 -26 -24 q22 -2 30 16z" fill="#7FA396" opacity=".8"/>
           <path d="M330 210 q20 -6 24 -26 q-22 0 -28 18z" fill="#5C897B" opacity=".75"/>
           <circle cx="140" cy="176" r="5" fill="#CE9A3B" opacity=".7"/>
           <circle cx="308" cy="130" r="4" fill="#CE9A3B" opacity=".6"/>
           <circle cx="96" cy="238" r="3.4" fill="#7FA396" opacity=".8"/>
-
-          <!-- tiny birds -->
           <path d="M150 92 q6 -6 12 0 M162 92 q6 -6 12 0" stroke="#20463F" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".55"/>
           <path d="M290 74 q5 -5 10 0" stroke="#20463F" stroke-width="2" fill="none" stroke-linecap="round" opacity=".45"/>
         </g>
@@ -394,50 +390,13 @@
   </div>
 </div>
 
-<!-- =================== ABOUT =================== -->
+<!-- =================== ABOUT (REAL PHOTO + 3D) =================== -->
 <section class="block" id="about">
   <div class="wrap about-grid">
-    <div class="about-portrait">
-      <!-- Illustration: hands nurturing a growing heart (нақты фото қосқанда осы SVG-ді алмастырыңыз) -->
-      <svg viewBox="0 0 320 380" xmlns="http://www.w3.org/2000/svg" aria-label="Қамқорлық пен өсу">
-        <defs>
-          <linearGradient id="pbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDF3EE"/><stop offset="1" stop-color="#DFEAE1"/></linearGradient>
-          <linearGradient id="pleaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FB0A3"/><stop offset="1" stop-color="#5C897B"/></linearGradient>
-          <linearGradient id="pheart" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8CE97"/><stop offset="1" stop-color="#CE9A3B"/></linearGradient>
-          <clipPath id="pclip"><rect width="320" height="380" rx="18"/></clipPath>
-        </defs>
-        <g clip-path="url(#pclip)">
-          <rect width="320" height="380" fill="url(#pbg)"/>
-          <circle cx="70" cy="70" r="60" fill="#F3EAD6" opacity=".6"/>
-          <circle cx="270" cy="110" r="46" fill="#CFE0D4" opacity=".55"/>
-          <circle cx="160" cy="150" r="92" fill="#fff" opacity=".35"/>
-
-          <!-- growing stem & leaves above the heart -->
-          <path d="M160 150 C160 118 160 100 160 84" stroke="#2C5F55" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-          <path d="M160 112 C142 108 130 94 128 76 C148 78 160 92 160 106z" fill="url(#pleaf)"/>
-          <path d="M160 98 C178 94 190 80 192 62 C172 64 160 78 160 92z" fill="#2C5F55"/>
-          <circle cx="160" cy="72" r="7" fill="#E8CE97"/>
-          <circle cx="132" cy="56" r="4" fill="#CE9A3B" opacity=".8"/>
-          <circle cx="190" cy="46" r="3.4" fill="#7FA396" opacity=".9"/>
-
-          <!-- heart -->
-          <path d="M160 214 C130 192 112 172 112 150 C112 132 126 122 140 122 C150 122 157 128 160 136 C163 128 170 122 180 122 C194 122 208 132 208 150 C208 172 190 192 160 214z" fill="url(#pheart)"/>
-          <path d="M138 140 c-4 4 -6 10 -4 16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>
-
-          <!-- gentle cupped hands -->
-          <path d="M52 300 C58 258 84 232 122 226 C138 223 152 226 160 232 C168 226 182 223 198 226 C236 232 262 258 268 300 C240 286 214 282 192 288 C180 291 168 296 160 303 C152 296 140 291 128 288 C106 282 80 286 52 300z" fill="#DCE8DE"/>
-          <path d="M64 296 C92 284 122 284 146 296 M174 296 C198 284 228 284 256 296" stroke="#B9CFC0" stroke-width="3" fill="none" stroke-linecap="round"/>
-
-          <!-- soft ground shadow -->
-          <ellipse cx="160" cy="330" rx="110" ry="14" fill="#20463F" opacity=".1"/>
-
-          <!-- floating seeds -->
-          <circle cx="82" cy="180" r="4" fill="#CE9A3B" opacity=".6"/>
-          <circle cx="244" cy="196" r="5" fill="#7FA396" opacity=".7"/>
-          <circle cx="256" cy="164" r="3" fill="#E8CE97" opacity=".9"/>
-        </g>
-        <rect x="1.5" y="1.5" width="317" height="377" rx="17" fill="none" stroke="#CFDDD3" stroke-width="1.5"/>
-      </svg>
+    <div class="about-portrait photo-3d" id="photo3d">
+      <div class="photo-ring r2"></div>
+      <div class="photo-ring"></div>
+      <img src="ainur.jpg" alt="Айнұр Қажымұқан — педагог-психолог" class="portrait-img" />
     </div>
     <div class="about-text">
       <span class="eyebrow">Мен туралы</span>
@@ -565,80 +524,6 @@
   </div>
 </section>
 
-<!-- =================== AUDIENCE =================== -->
-<section class="block" id="audience" style="background:var(--mist-2);padding-top:72px;padding-bottom:72px">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Кімдерге арналған</span>
-      <h2>Әйелдер, балалар және жасөспірімдер</h2>
-      <p>Жұмысымның басым бөлігі — әйелдердің эмоционалды саулығы және балалар мен жасөспірімдердің жан дүниесі.</p>
-    </div>
-    <div class="cards">
-
-      <div class="card" style="text-align:center">
-        <svg viewBox="0 0 200 150" style="margin:0 auto 14px;max-width:190px" aria-hidden="true">
-          <defs><linearGradient id="a1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EDF3EE"/><stop offset="1" stop-color="#DDE8DF"/></linearGradient></defs>
-          <ellipse cx="100" cy="78" rx="86" ry="64" fill="url(#a1)"/>
-          <!-- big heart sheltering small heart -->
-          <path d="M100 118 C70 96 52 76 52 56 C52 40 65 30 78 30 C88 30 95 36 100 44 C105 36 112 30 122 30 C135 30 148 40 148 56 C148 76 130 96 100 118z" fill="#2C5F55"/>
-          <path d="M100 100 C84 88 74 77 74 66 C74 57 81 52 88 52 C93 52 97 55 100 60 C103 55 107 52 112 52 C119 52 126 57 126 66 C126 77 116 88 100 100z" fill="#E8CE97"/>
-          <!-- sparkles -->
-          <circle cx="58" cy="34" r="4" fill="#CE9A3B" opacity=".7"/>
-          <circle cx="146" cy="98" r="3.4" fill="#7FA396" opacity=".9"/>
-          <path d="M156 36 l3 7 7 1 -5 5 1 7 -6 -3 -6 3 1 -7 -5 -5 7 -1z" fill="#CE9A3B" opacity=".55"/>
-        </svg>
-        <h3>Аналар мен балалар</h3>
-        <p style="font-size:.94rem;color:#4a5a55">Бала тәрбиесі, бала мазасыздығы, ана мен бала арасындағы байланыс — ойын терапиясы әдістерімен.</p>
-      </div>
-
-      <div class="card" style="text-align:center">
-        <svg viewBox="0 0 200 150" style="margin:0 auto 14px;max-width:190px" aria-hidden="true">
-          <ellipse cx="100" cy="78" rx="86" ry="64" fill="url(#a1)"/>
-          <!-- vase -->
-          <path d="M84 96 h32 l-5 26 h-22 z" fill="#CE9A3B"/>
-          <path d="M84 96 h32" stroke="#A9761F" stroke-width="2"/>
-          <!-- blossoming branch -->
-          <path d="M100 96 C100 76 100 62 100 48" stroke="#2C5F55" stroke-width="3.6" fill="none" stroke-linecap="round"/>
-          <path d="M100 76 C88 72 80 62 79 50 C91 52 99 62 100 72z" fill="#7FA396"/>
-          <path d="M100 62 C112 58 120 48 121 36 C109 38 101 48 100 58z" fill="#5C897B"/>
-          <!-- flower -->
-          <g transform="translate(100 40)">
-            <circle r="6" fill="#CE9A3B"/>
-            <circle cx="0" cy="-11" r="6" fill="#E8CE97"/><circle cx="10" cy="-4" r="6" fill="#E8CE97"/>
-            <circle cx="7" cy="9" r="6" fill="#E8CE97"/><circle cx="-7" cy="9" r="6" fill="#E8CE97"/>
-            <circle cx="-10" cy="-4" r="6" fill="#E8CE97"/>
-          </g>
-          <!-- gentle ripples -->
-          <path d="M56 128 q10 -5 20 0 M124 128 q10 -5 20 0" stroke="#7FA396" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".6"/>
-        </svg>
-        <h3>Әйелдер</h3>
-        <p style="font-size:.94rem;color:#4a5a55">Өзіне сенімділік, эмоционалды шаршау, өмірлік өзгерістер мен ішкі тепе-теңдік.</p>
-      </div>
-
-      <div class="card" style="text-align:center">
-        <svg viewBox="0 0 200 150" style="margin:0 auto 14px;max-width:190px" aria-hidden="true">
-          <ellipse cx="100" cy="78" rx="86" ry="64" fill="url(#a1)"/>
-          <!-- open book -->
-          <path d="M60 106 C74 100 88 100 100 106 C112 100 126 100 140 106 L140 116 C126 110 112 110 100 116 C88 110 74 110 60 116 z" fill="#FAF8F3" stroke="#20463F" stroke-width="2.4" stroke-linejoin="round"/>
-          <path d="M100 106 v10" stroke="#20463F" stroke-width="2.4"/>
-          <!-- sprout growing from the book -->
-          <path d="M100 104 C100 88 100 78 100 68" stroke="#2C5F55" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-          <path d="M100 86 C90 83 84 75 83 66 C93 68 99 75 100 82z" fill="#7FA396"/>
-          <path d="M100 74 C110 71 116 63 117 54 C107 56 101 63 100 70z" fill="#5C897B"/>
-          <!-- star it reaches for -->
-          <path d="M100 30 l4 9 10 1 -7 7 2 10 -9 -5 -9 5 2 -10 -7 -7 10 -1z" fill="#CE9A3B"/>
-          <!-- small sparkles -->
-          <circle cx="66" cy="48" r="3.4" fill="#E8CE97"/>
-          <circle cx="138" cy="62" r="3" fill="#7FA396" opacity=".9"/>
-        </svg>
-        <h3>Жасөспірімдер</h3>
-        <p style="font-size:.94rem;color:#4a5a55">Емтихан алаңдаушылығы, өзін-өзі бағалау, құрдастарымен қарым-қатынас, өтпелі кезең.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- =================== HOW IT WORKS =================== -->
 <section class="block how" id="how">
   <div class="wrap">
@@ -744,7 +629,7 @@
   </div>
 </section>
 
-<!-- =================== FOOTER / CONTACT =================== -->
+<!-- =================== FOOTER =================== -->
 <footer id="contact">
   <div class="wrap">
     <div class="foot-grid">
@@ -812,7 +697,7 @@
 </div>
 
 <script>
-/* ========= БАПТАУ (осы жерді ғана өзгертесіз) ========= */
+/* ========= БАПТАУ ========= */
 const CONFIG = {
   whatsapp: "77476769908",
   aiEndpoint: "/api/chat"
@@ -824,28 +709,38 @@ const navLinks = document.getElementById('navLinks');
 burger.addEventListener('click', ()=> navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
 
-/* ========= Күн логикасы: демалыс = кабинет, жұмыс күні = онлайн ========= */
+/* ========= 3D фото эффект ========= */
+const p3d = document.getElementById('photo3d');
+if(p3d){
+  const pimg = p3d.querySelector('.portrait-img');
+  p3d.addEventListener('mousemove', e=>{
+    const r = p3d.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - .5;
+    const y = (e.clientY - r.top) / r.height - .5;
+    pimg.style.transform = `rotateY(${x*14}deg) rotateX(${-y*14}deg) scale(1.02)`;
+  });
+  p3d.addEventListener('mouseleave', ()=>{ pimg.style.transform = 'rotateY(0) rotateX(0) scale(1)'; });
+}
+
+/* ========= Күн логикасы ========= */
 const dateInput = document.getElementById('bDate');
 const lblOffline = document.getElementById('lblOffline');
 const lblOnline = document.getElementById('lblOnline');
 const offRadio = lblOffline.querySelector('input');
 const onRadio = lblOnline.querySelector('input');
 const warn = document.getElementById('weekendWarn');
-// Бүгіннен бұрынғы күндерді бөгеу
 dateInput.min = new Date().toISOString().split('T')[0];
 
 function applyDayRule(){
   if(!dateInput.value){ enableBoth(); return; }
-  const d = new Date(dateInput.value).getDay(); // 0=Жексенбі, 6=Сенбі
+  const d = new Date(dateInput.value).getDay();
   const weekend = (d===0 || d===6);
   if(weekend){
-    // Демалыс: тек КАБИНЕТТЕ
     onRadio.disabled = true;  lblOnline.classList.add('disabled');
     offRadio.disabled = false; lblOffline.classList.remove('disabled');
     offRadio.checked = true;
     warn.innerHTML = 'Демалыс күндері (сенбі, жексенбі) қабылдау <b>кабинетте</b> жүргізіледі.';
   } else {
-    // Жұмыс күні: тек ОНЛАЙН
     offRadio.disabled = true;  lblOffline.classList.add('disabled');
     onRadio.disabled = false;  lblOnline.classList.remove('disabled');
     onRadio.checked = true;
@@ -900,14 +795,14 @@ const SYSTEM_PROMPT = `Сен — Айнұр Қажымұқан атты пси�
 Айнұр туралы факттер:
 - Педагог-психолог, EMDR және CBT терапевті. Қазір SDU University Психология департаментінде психолог. Білімі: Қаратеңіз техникалық университеті (Түркия, бакалавр, психология), Абай атындағы ҚазҰПУ (магистр). Сертификаттар: EMDR терапевт (еуропалық аккредитация, AY Enstitüsü, Түркия, 2026), CBT терапевт (2026). Бұрын Sear психологиялық орталығында балалармен (2–16 жас) және мектепте психолог болып жұмыс істеген. Тілдер: қазақша (ана тілі), түрікше (еркін), ағылшынша (орташа).
 - Әдістер: EMDR, когнитивті-мінез-құлықтық терапия (CBT/КМТ), ойын терапиясы (2–16 жас балаларға), жеке және топтық кеңес беру, топтық тренингтер, оқушы және өмір коучингі. (Отбасылық/жұптық терапия қазір ұсынылмайды.)
-- Негізгі аудитория: әйелдер, балалар мен жасөспірімдер (аналар мен балалар, әйелдердің эмоционалды саулығы, жасөспірімдердің емтихан алаңдаушылығы мен өзін-өзі бағалауы).
+- Негізгі аудитория: әйелдер, балалар мен жасөспірімдер.
 - Жұмыс тақырыптары: мазасыздық, дүрбелең, депрессия, травма, емтихан алаңдаушылығы, өзіне сенімділік, қарым-қатынас, отбасылық мәселелер, ұйқы, фобиялар, жасөспірімдер, ата-аналық, кәсіби бағдар.
-- Форматтар: ЖҰМЫС КҮНДЕРІ (дүйсенбі–жұма) — ТЕК ОНЛАЙН. ДЕМАЛЫС КҮНДЕРІ (сенбі–жексенбі) — КАБИНЕТТЕ (офлайн). Себебі психолог жұмыс күндері университетте істейді, сондықтан кабинетте тек демалыс күндері қабылдай алады.
+- Форматтар: ЖҰМЫС КҮНДЕРІ (дүйсенбі–жұма) — ТЕК ОНЛАЙН. ДЕМАЛЫС КҮНДЕРІ (сенбі–жексенбі) — КАБИНЕТТЕ (офлайн).
 - Жазылу сайттағы "Кездесуге жазылу" формасы арқылы (WhatsApp-қа түседі).
 
 Ережелер:
-- Диагноз қойма, дәрі ұсынба. Сен терапевт емессің — терапияны алмастырмайсың.
-- Адам ауыр дағдарыста немесе өзіне зиян келтіру туралы айтса: жанашырлық таныт, дереу маманға немесе 103-ке хабарласуды ұсын.
+- Диагноз қойма, дәрі ұсынба. Сен терапевт емессің.
+- Адам ауыр дағдарыста болса: жанашырлық таныт, дереу маманға немесе 103-ке хабарласуды ұсын.
 - Жауаптар қысқа әрі нақты болсын (2-4 сөйлем). Орынды жерде кездесуге жазылуды ұсын.`;
 
 function addMsg(text, who){
