@@ -15,7 +15,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const prompt = `Taqyrыp: "${topic}". Стиль: ${tone}. Осы тақырыпқа толық мазмұн жаса.`;
+    const prompt = `Taqyrыp: "${topic}". Стиль: ${tone}.
+
+ÖNEMLİ: SADECE JSON döndür, hiçbir şey yazma!
+Format:
+{"blog":{"title":"...","body":"..."},"instagram":"...","tiktok":"...","facebook":"...","hashtags":["#tag"]}`;
 
     const payload = {
       systemInstruction: { parts: [{ text: system }] },
