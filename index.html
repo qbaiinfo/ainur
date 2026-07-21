@@ -260,7 +260,19 @@
   @media(max-width:560px){
     .cards{grid-template-columns:1fr;}
     .two{grid-template-columns:1fr;}
-    section.block{padding:64px 0;}
+    section.block{padding:56px 0;}
+    body{font-size:16px;}
+    .hero{padding:40px 0 56px;}
+    .hero-lead{max-width:none;}
+    .hero-cta .btn{width:100%;justify-content:center;}
+    .strip-inner{flex-direction:column;gap:10px;align-items:flex-start;padding:18px 24px;}
+    .about-portrait{max-width:320px;margin-inline:auto;}
+    form.book{padding:22px 18px;}
+    .fmt{grid-template-columns:1fr;}
+    .hours-row{flex-direction:column;gap:2px;}
+    .ai-panel{right:0;bottom:0;width:100vw;height:88vh;border-radius:22px 22px 0 0;}
+    .ai-fab{right:16px;bottom:16px;padding:.9em 1.2em;}
+    .topics-grid{grid-template-columns:1fr;}
   }
   @media(prefers-reduced-motion:reduce){
     *{animation:none!important;transition:none!important;scroll-behavior:auto!important;}
@@ -297,7 +309,7 @@
     <div class="hero-copy">
       <span class="eyebrow">EMDR · КМТ · Схема-терапия</span>
       <h1>Ішкі тыныштыққа<br>апаратын қауіпсіз кеңістік</h1>
-      <p class="hero-lead">Мазасыздық, күйзеліс немесе қиын кезеңнен өтіп жатсаңыз — жалғыз емессіз. Ғылыми дәлелденген әдістермен, сенімді әрі мұқият қолдау көрсетемін.</p>
+      <p class="hero-lead">Мазасыздық, күйзеліс немесе қиын кезеңнен өтіп жатсаңыз — жалғыз емессіз. Әйелдер, балалар мен жасөспірімдерге ғылыми дәлелденген әдістермен жылы әрі сенімді қолдау көрсетемін.</p>
       <div class="hero-cta">
         <a href="#booking" class="btn btn-primary">Кездесуге жазылу
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -380,7 +392,7 @@
     <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.5 6.5H21l-5 4 2 7-6-4-6 4 2-7-5-4h6.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Сертификатталған EMDR маманы</span>
     <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.5"/></svg> Онлайн және кабинетте қабылдау</span>
     <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="8" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Толық құпиялылық</span>
-    <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M12 3v18" stroke="currentColor" stroke-width="1.5"/></svg> Түркияда білім алған</span>
+    <span><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-9-9c-1.2-2.7.6-6 4-6 2.2 0 3.6 1.2 5 3 1.4-1.8 2.8-3 5-3 3.4 0 5.2 3.3 4 6-2 4.5-9 9-9 9z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Әйелдер мен балаларға арналған</span>
   </div>
 </div>
 
@@ -528,6 +540,76 @@
   </div>
 </section>
 
+<!-- =================== AUDIENCE =================== -->
+<section class="block" id="audience" style="background:var(--mist-2);padding-top:72px;padding-bottom:72px">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Кімдерге арналған</span>
+      <h2>Әйелдер, балалар және жасөспірімдер</h2>
+      <p>Жұмысымның басым бөлігі — әйелдердің эмоционалды саулығы және балалар мен жасөспірімдердің жан дүниесі.</p>
+    </div>
+    <div class="cards">
+
+      <div class="card" style="text-align:center">
+        <svg viewBox="0 0 200 150" style="margin:0 auto 14px;max-width:190px" aria-hidden="true">
+          <defs><linearGradient id="a1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EDF3EE"/><stop offset="1" stop-color="#DDE8DF"/></linearGradient></defs>
+          <ellipse cx="100" cy="78" rx="86" ry="64" fill="url(#a1)"/>
+          <!-- mother -->
+          <circle cx="86" cy="52" r="16" fill="#F1D9BC"/>
+          <path d="M70 50c0-14 8-24 16-24s16 10 16 24c-4-8-10-11-16-11s-12 3-16 11z" fill="#3A2E26"/>
+          <path d="M58 118c0-26 12-42 28-42 8 0 15 4 20 10" fill="#2C5F55"/>
+          <!-- child leaning in -->
+          <circle cx="124" cy="72" r="11" fill="#F1D9BC"/>
+          <path d="M113 70c0-9 5-15 11-15s11 6 11 15c-3-5-7-7-11-7s-8 2-11 7z" fill="#4A3A2E"/>
+          <path d="M106 118c0-18 8-30 18-30 10 0 18 12 18 30z" fill="#7FA396"/>
+          <!-- embrace arm -->
+          <path d="M96 84c8 6 16 8 24 6" stroke="#20463F" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <!-- heart accent -->
+          <path d="M148 40c2-4 8-4 8 1 0 4-8 8-8 8s-8-4-8-8c0-5 6-5 8-1z" fill="#CE9A3B" opacity=".85"/>
+        </svg>
+        <h3>Аналар мен балалар</h3>
+        <p style="font-size:.94rem;color:#4a5a55">Бала тәрбиесі, бала мазасыздығы, ана мен бала арасындағы байланыс — арт-терапия әдістерімен.</p>
+      </div>
+
+      <div class="card" style="text-align:center">
+        <svg viewBox="0 0 200 150" style="margin:0 auto 14px;max-width:190px" aria-hidden="true">
+          <ellipse cx="100" cy="78" rx="86" ry="64" fill="url(#a1)"/>
+          <!-- woman in calm pose, flower growing -->
+          <circle cx="100" cy="50" r="17" fill="#F1D9BC"/>
+          <path d="M83 48c0-15 8-26 17-26s17 11 17 26c-4-9-10-12-17-12s-13 3-17 12z" fill="#3A2E26"/>
+          <path d="M100 22c0-4 3-8 8-8 0 5-3 8-8 8z" fill="#5C897B"/>
+          <path d="M70 118c0-28 13-46 30-46s30 18 30 46z" fill="#2C5F55"/>
+          <!-- hands holding a small flower -->
+          <circle cx="100" cy="92" r="7" fill="#E8CE97"/>
+          <path d="M100 99v10M95 92c-4 0-7-3-7-7 4 0 7 3 7 7zM105 92c4 0 7-3 7-7-4 0-7 3-7 7z" stroke="#CE9A3B" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M84 96c5 5 10 7 16 7s11-2 16-7" stroke="#F1D9BC" stroke-width="7" fill="none" stroke-linecap="round"/>
+        </svg>
+        <h3>Әйелдер</h3>
+        <p style="font-size:.94rem;color:#4a5a55">Өзіне сенімділік, эмоционалды шаршау, өмірлік өзгерістер мен ішкі тепе-теңдік.</p>
+      </div>
+
+      <div class="card" style="text-align:center">
+        <svg viewBox="0 0 200 150" style="margin:0 auto 14px;max-width:190px" aria-hidden="true">
+          <ellipse cx="100" cy="78" rx="86" ry="64" fill="url(#a1)"/>
+          <!-- teen girl with book/backpack, star (exam/confidence) -->
+          <circle cx="96" cy="52" r="15" fill="#F1D9BC"/>
+          <path d="M81 50c0-13 7-23 15-23s15 10 15 23c-3-8-9-10-15-10s-12 2-15 10z" fill="#4A3A2E"/>
+          <path d="M111 44c6 2 10 8 10 16-6-1-10-6-10-12z" fill="#4A3A2E"/>
+          <path d="M70 118c0-24 11-40 26-40s26 16 26 40z" fill="#7FA396"/>
+          <!-- book -->
+          <path d="M84 96h24v14H84z" fill="#FAF8F3" stroke="#20463F" stroke-width="2"/>
+          <path d="M96 96v14" stroke="#20463F" stroke-width="2"/>
+          <!-- star -->
+          <path d="M142 42l3 7 8 1-6 5 2 8-7-4-7 4 2-8-6-5 8-1z" fill="#CE9A3B"/>
+        </svg>
+        <h3>Жасөспірімдер</h3>
+        <p style="font-size:.94rem;color:#4a5a55">Емтихан алаңдаушылығы, өзін-өзі бағалау, құрдастарымен қарым-қатынас, өтпелі кезең.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- =================== HOW IT WORKS =================== -->
 <section class="block how" id="how">
   <div class="wrap">
@@ -660,6 +742,7 @@
         <a href="tel:+77476769908">+7 747 676 99 08</a>
         <a href="https://wa.me/77476769908" target="_blank" rel="noopener">WhatsApp жазу</a>
         <p>Алматы қаласы, [мекенжай]</p>
+        <a href="studio.html" style="opacity:.55;font-size:.85rem">Мазмұн студиясы →</a>
       </div>
       <div class="foot-col">
         <h4>Жұмыс уақыты</h4>
@@ -789,6 +872,7 @@ const SYSTEM_PROMPT = `Сен — Айнұр Қажымұхан қызы атт�
 Айнұр туралы факттер:
 - Психолог-кеңесші, Түркияда психология бойынша білім алған, EMDR сертификаты бар.
 - Әдістер: EMDR, когнитивті-мінез-құлық терапиясы (КМТ), схема-терапия, гештальт-терапия, арт-терапия. (Отбасылық/жұптық терапия қазір ұсынылмайды.)
+- Негізгі аудитория: әйелдер, балалар мен жасөспірімдер (аналар мен балалар, әйелдердің эмоционалды саулығы, жасөспірімдердің емтихан алаңдаушылығы мен өзін-өзі бағалауы).
 - Жұмыс тақырыптары: мазасыздық, дүрбелең, депрессия, травма, емтихан алаңдаушылығы, өзіне сенімділік, қарым-қатынас, отбасылық мәселелер, ұйқы, фобиялар, жасөспірімдер, ата-аналық, кәсіби бағдар.
 - Форматтар: ЖҰМЫС КҮНДЕРІ (дүйсенбі–жұма) — ТЕК ОНЛАЙН. ДЕМАЛЫС КҮНДЕРІ (сенбі–жексенбі) — КАБИНЕТТЕ (офлайн). Себебі психолог жұмыс күндері университетте істейді, сондықтан кабинетте тек демалыс күндері қабылдай алады.
 - Жазылу сайттағы "Кездесуге жазылу" формасы арқылы (WhatsApp-қа түседі).
