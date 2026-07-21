@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Мазмұн студиясы — Айнұр Қажымұхан қызы</title>
+<title>Мазмұн студиясы — Айнұр Қажымұқан</title>
 <meta name="robots" content="noindex" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232C5F55'/%3E%3Cpath d='M16 24c0-5 0-8 0-8m0 0c-3-1-5-3-5-6 3 0 5 2 5 4m0 2c3-1 5-3 5-6-3 0-5 2-5 4' stroke='%23CE9A3B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -203,7 +203,7 @@
 const CONFIG = {
   aiEndpoint: "https://api.anthropic.com/v1/messages", // Vercel-де "/api/chat" деп өзгертіңіз
   aiModel: "claude-sonnet-4-6",
-  brandName: "Айнұр Қажымұхан қызы",
+  brandName: "Айнұр Қажымұқан",
   brandHandle: "@psiholog_almaty"   // Instagram/TikTok атын осында жазыңыз
 };
 
@@ -224,7 +224,7 @@ async function generate(){
   const btn=$('genBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Жасалуда…';
   $('err').classList.remove('show');
 
-  const sys = `Сен — Айнұр Қажымұхан қызы атты психолог-кеңесшінің мазмұн көмекшісісің. Барлық мәтінді САПАЛЫ ҚАЗАҚ тілінде жаз. Психология тақырыбына сай — жылы, ғылыми негізделген, бірақ қарапайым тілде. Диагноз қойма, дәрі ұсынба. Әр платформаның стиліне бейімде: Instagram — эмоционалды әрі қысқа, TikTok — қысқа видео сценарийі (ілмек + айтылатын сөз), Facebook — толығырақ әрі әңгімелесу үлгісінде.
+  const sys = `Сен — Айнұр Қажымұқан атты психолог-кеңесшінің мазмұн көмекшісісің. Барлық мәтінді САПАЛЫ ҚАЗАҚ тілінде жаз. Психология тақырыбына сай — жылы, ғылыми негізделген, бірақ қарапайым тілде. Диагноз қойма, дәрі ұсынба. Әр платформаның стиліне бейімде: Instagram — эмоционалды әрі қысқа, TikTok — қысқа видео сценарийі (ілмек + айтылатын сөз), Facebook — толығырақ әрі әңгімелесу үлгісінде.
 
 ТЕК JSON қайтар, басқа мәтін жазба, Markdown қолданба. Формат:
 {
@@ -336,7 +336,7 @@ function drawCard(ctx,W,H,scale){
   ctx.font=`700 ${26*scale}px Manrope, sans-serif`;
   ctx.fillText(CONFIG.brandName,pad+56*scale,fy-28*scale);
   ctx.fillStyle=m.sub;ctx.font=`500 ${22*scale}px Manrope, sans-serif`;
-  ctx.fillText('Психолог-кеңесші · '+CONFIG.brandHandle,pad+56*scale,fy-4*scale);
+  ctx.fillText('Педагог-психолог · '+CONFIG.brandHandle,pad+56*scale,fy-4*scale);
   ctx.textBaseline='top';
 }
 
