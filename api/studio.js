@@ -21,13 +21,17 @@ export default async function handler(req, res) {
 
 Барлық мәтіндер қазақ тілінде болсын, психология тақырыбында жылы, кәсіби, диагноз қоймай.
 
+Instagram посты үшін де қысқа, вертикалды жазба сурет мәтінін (imageCaption) жаса — 3-5 сөзден аспасын, эмоционалды әрі шабыттандырушы.
+
 Жауап тек төмендегі JSON форматында болсын, басқа сөз, түсіндірме, markdown жоқ:
 
-{"blog":{"title":"мақала тақырыбы","body":"толық мәтін"},"instagram":"Instagram посты","tiktok":"TikTok сценарийі","facebook":"Facebook посты","hashtags":["#хэштег1","#хэштег2","#хэштег3"]}`;
+{"blog":{"title":"мақала тақырыбы","body":"толық мәтін"},"instagram":"Instagram посты","imageCaption":"суреттегі қысқа мәтін","tiktok":"TikTok сценарийі","facebook":"Facebook посты","hashtags":["#хэштег1","#хэштег2","#хэштег3"],"imageTheme":"lotus|eye|nature|heart|book|sun|water"}
+
+imageTheme мәні мына тізімнен ғана: lotus (тыныштық, медитация), eye (EMDR, назар), nature (өсу, даму), heart (сүйіспеншілік, өзін-өзі бағалау), book (білім, оқу), sun (үміт, жарық), water (эмоция, ағыс). Тақырыпқа ең жақынын таңда.`;
 
     const payload = {
       systemInstruction: { 
-        parts: [{ text: system + "\n\nҚАТАҢ ЕРЕЖЕ: Жауапты ТЕК JSON форматында бер. Ешқандай кіріспе, түсіндірме, markdown (```) жазба. Тек таза JSON объектісі." }] 
+        parts: [{ text: system + "\n\nҚАТАҢ ЕРЕЖЕ: Жауапты ТЕК JSON форматында бер. Ешқандай кіріспе, түсіндірме, markdown жазба." }] 
       },
       contents: [{
         parts: [{ text: prompt }]
@@ -54,9 +58,7 @@ export default async function handler(req, res) {
     const data = await r.json();
     
     if (!r.ok) {
-      return res.status(r.status).json({ 
-        error: data.error?.message || `API ${r.status}`
-      });
+      return res.status(r.status).json({ error: data.error?.message || `API ${r.status}` });
     }
     
     let text = (data.candidates?.[0]?.content?.parts?.[0]?.text || "").trim();
@@ -65,10 +67,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Empty response" });
     }
 
-    // Aggressive cleanup
     text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    
-    // Find first { and last } to extract just the JSON
     const firstBrace = text.indexOf('{');
     const lastBrace = text.lastIndexOf('}');
     if (firstBrace >= 0 && lastBrace > firstBrace) {
@@ -79,10 +78,7 @@ export default async function handler(req, res) {
       const json = JSON.parse(text);
       return res.status(200).json(json);
     } catch (e) {
-      return res.status(500).json({ 
-        error: "Invalid JSON: " + e.message, 
-        raw: text.substring(0, 500) 
-      });
+      return res.status(500).json({ error: "Invalid JSON: " + e.message, raw: text.substring(0, 500) });
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });
