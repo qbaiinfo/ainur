@@ -772,7 +772,6 @@
         <a href="https://wa.me/77476769908" target="_blank" rel="noopener">WhatsApp жазу</a>
         <a href="mailto:ainur.khajimkhaan@sdu.edu.kz">ainur.khajimkhaan@sdu.edu.kz</a>
         <p>Алматы, Әуезов ауданы</p>
-        <a href="studio.html" style="opacity:.55;font-size:.85rem">Мазмұн студиясы →</a>
       </div>
       <div class="foot-col">
         <h4>Жұмыс уақыты</h4>
@@ -816,8 +815,8 @@
 /* ========= БАПТАУ (осы жерді ғана өзгертесіз) ========= */
 const CONFIG = {
   whatsapp: "77476769908",          // елтаңбасыз, + белгісіз: 7 700 ... -> 7770...
-  aiEndpoint: "https://api.anthropic.com/v1/messages", // Vercel-де: "/api/chat" деп өзгертіңіз
-  aiModel: "claude-sonnet-4-6"
+  aiEndpoint: "/api/chat" // Gemini backend proxy (güvenсіз API key)
+  geminiKey: "AQ.Ab8RN6KHqQj2cQ9fmMnXK_EwIFGmxHkH17Wh36NSuICIN-tJ4Q"
 };
 
 /* ========= Мобиль мәзір ========= */
@@ -936,14 +935,12 @@ async function sendAI(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: CONFIG.aiModel,
-        max_tokens: 1000,
         system: SYSTEM_PROMPT,
         messages: history
       })
     });
     const data = await res.json();
-    const reply = (data.content||[]).map(b=>b.text||'').join('\n').trim()
+    const reply = (data.reply || '').trim()
       || 'Кешіріңіз, дәл қазір жауап бере алмадым. WhatsApp арқылы тікелей хабарлассаңыз болады.';
     typing.remove();
     addMsg(reply, 'bot');
