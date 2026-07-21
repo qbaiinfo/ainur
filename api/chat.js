@@ -1,11 +1,3 @@
-// Vercel serverless функциясы — Gemini API арасындағы прокси
-// Файл орналасуы: жобаның түбіндегі /api/chat.js
-//
-// ЖАСАУ ҚАДАМДАРЫ:
-// 1) Vercel → жоба → Settings → Environment Variables:
-//    GEMINI_API_KEY = "AQ.Ab8RN6K..." (Gemini key)
-// 2) Дәл ғана, CI/CD автоматты деплой жасайды.
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -13,13 +5,13 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "GEMINI_API_KEY орнатылмаған" });
+    return res.status(500).json({ error: "GEMINI_API_KEY not configured" });
   }
 
   try {
     const { messages, system } = req.body;
     if (!messages || !Array.isArray(messages)) {
-      return res.status(400).json({ error: "Жарамсыз сұрау" });
+      return res.status(400).json({ error: "Invalid request" });
     }
 
     const payload = {
@@ -32,19 +24,26 @@ export default async function handler(req, res) {
     };
 
     const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-goog-api-key": apiKey
+        },
         body: JSON.stringify(payload),
       }
     );
 
     const data = await r.json();
+    
+    if (!r.ok) {
+      return res.status(r.status).json({ error: data.error?.message || `API ${r.status}` });
+    }
+
     const reply = (data.candidates?.[0]?.content?.parts?.[0]?.text || "").trim();
     return res.status(200).json({ reply });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
 }
-
