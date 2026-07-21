@@ -14,20 +14,26 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const prompt = `Тақырып: "${topic}". Стиль: ${tone}.
+    const prompt = `Тақырып: "${topic}"
+Стиль: ${tone}
 
-Осы тақырыпқа қазақ тілінде толық мазмұн жаса.
+Осы тақырыпқа қазақ тілінде толық мазмұн жаса. Кем дегенде 5-6 сөйлемдік блог, әр әлеуметтік желі үшін жеке мәтін.
 
-МАҢЫЗДЫ: Жауапты ТЕК JSON форматында бер. Формат:
-{"blog":{"title":"...","body":"..."},"instagram":"...","tiktok":"...","facebook":"...","hashtags":["#tag1","#tag2"]}`;
+Барлық мәтіндер қазақ тілінде болсын, психология тақырыбында жылы, кәсіби, диагноз қоймай.
+
+Жауап тек төмендегі JSON форматында болсын, басқа сөз, түсіндірме, markdown жоқ:
+
+{"blog":{"title":"мақала тақырыбы","body":"толық мәтін"},"instagram":"Instagram посты","tiktok":"TikTok сценарийі","facebook":"Facebook посты","hashtags":["#хэштег1","#хэштег2","#хэштег3"]}`;
 
     const payload = {
-      systemInstruction: { parts: [{ text: system }] },
+      systemInstruction: { 
+        parts: [{ text: system + "\n\nҚАТАҢ ЕРЕЖЕ: Жауапты ТЕК JSON форматында бер. Ешқандай кіріспе, түсіндірме, markdown (```) жазба. Тек таза JSON объектісі." }] 
+      },
       contents: [{
         parts: [{ text: prompt }]
       }],
       generationConfig: { 
-        maxOutputTokens: 2000,
+        maxOutputTokens: 3000,
         temperature: 0.7,
         responseMimeType: "application/json"
       }
@@ -59,15 +65,24 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Empty response" });
     }
 
+    // Aggressive cleanup
     text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) text = jsonMatch[0];
+    
+    // Find first { and last } to extract just the JSON
+    const firstBrace = text.indexOf('{');
+    const lastBrace = text.lastIndexOf('}');
+    if (firstBrace >= 0 && lastBrace > firstBrace) {
+      text = text.substring(firstBrace, lastBrace + 1);
+    }
     
     try {
       const json = JSON.parse(text);
       return res.status(200).json(json);
     } catch (e) {
-      return res.status(500).json({ error: "Invalid JSON: " + e.message, raw: text.substring(0, 500) });
+      return res.status(500).json({ 
+        error: "Invalid JSON: " + e.message, 
+        raw: text.substring(0, 500) 
+      });
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });
