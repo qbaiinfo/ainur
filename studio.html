@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  :root{--ink:#1B2B27;--evergreen:#2C5F55;--evergreen-deep:#20463F;--sage:#7FA396;--mist:#E7EFE9;--mist-2:#F0F5F0;--paper:#FAF8F3;--honey:#CE9A3B;--line:#DCE4DD;--shadow:0 18px 50px -24px rgba(27,43,39,.35);}
+  :root{--ink:#1B2B27;--evergreen:#2C5F55;--evergreen-deep:#20463F;--sage:#7FA396;--mist:#E7EFE9;--mist-2:#F0F5F0;--paper:#FAF8F3;--honey:#CE9A3B;--honey-soft:#E8CE97;--line:#DCE4DD;--shadow:0 18px 50px -24px rgba(27,43,39,.35);}
   *{box-sizing:border-box;}
   body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;font-size:16px;line-height:1.6;}
   h1,h2,h3{font-family:"Spectral",serif;font-weight:500;margin:0;}
@@ -66,6 +66,17 @@
   .err.show{display:block;}
   .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
   @keyframes spin{to{transform:rotate(360deg);}}
+  
+  /* IMAGE GENERATOR */
+  .image-section{margin-top:34px;}
+  .image-card{background:linear-gradient(135deg,#fff,#F0F5F0);border:1px solid var(--line);border-radius:18px;padding:24px;text-align:center;}
+  .image-card h3{font-family:"Spectral";font-size:1.35rem;margin-bottom:8px;}
+  .image-card p{color:var(--sage);font-size:.9rem;margin-bottom:20px;}
+  .image-preview{background:#fff;border-radius:16px;padding:0;margin:0 auto 20px;max-width:400px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.08);overflow:hidden;}
+  .image-preview svg{width:100%;height:100%;display:block;}
+  .image-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .image-actions .btn{padding:.65em 1.3em;font-size:.9rem;}
+  
   @media(max-width:820px){.row{grid-template-columns:1fr;}.platforms{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -94,7 +105,7 @@
     <div class="hero">
       <span class="eyebrow">Тек ішкі қолданысқа</span>
       <h1>Бір тақырыптан — толық мазмұн</h1>
-      <p>Тақырыпты жазыңыз. AI сізге блог мақаласын, Instagram, TikTok және Facebook үшін мәтіндерді дайындап береді.</p>
+      <p>Тақырыпты жазыңыз. AI сізге блог, әлеуметтік желі мәтіндері және брендке сай сурет дайындап береді.</p>
     </div>
 
     <div class="panel">
@@ -151,12 +162,25 @@
         </div>
       </div>
       <div class="tags" id="tags"></div>
+
+      <div class="image-section">
+        <div class="sec-title">🎨 Instagram суреті</div>
+        <div class="image-card">
+          <h3>Брендке сай сурет</h3>
+          <p>Айнұрдың түстерімен, Instagram-ға дайын 1080×1080</p>
+          <div class="image-preview" id="imagePreview"></div>
+          <div class="image-actions">
+            <button class="btn btn-primary" style="width:auto" onclick="downloadImage()">⬇ PNG жүктеу</button>
+            <button class="btn btn-honey" onclick="regenerateImage()">🔄 Басқа сурет</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-const STUDIO_PASSWORD = "1234";
+const STUDIO_PASSWORD = "ainur2024";
 function checkPass(){
   const p = document.getElementById('passInput').value;
   if(p === STUDIO_PASSWORD){
@@ -170,6 +194,9 @@ function checkPass(){
 }
 
 const $ = id => document.getElementById(id);
+let currentData = null;
+let currentVariant = 0;
+
 function setTopic(el){ $('topic').value = el.textContent; $('topic').focus(); }
 function copyText(id, btn){
   const txt = $(id).textContent;
@@ -204,6 +231,8 @@ async function generate(){
       throw new Error(errData.error || `API ${res.status}`);
     }
     const j = await res.json();
+    currentData = j;
+    currentVariant = 0;
     render(j);
   } catch(e){
     $('err').textContent = `Қате: ${e.message}`;
@@ -228,8 +257,195 @@ function render(j){
     s.textContent = h;
     tags.appendChild(s);
   });
+  renderImage(j.imageTheme || 'lotus', j.imageCaption || j.blog?.title || '', currentVariant);
   $('results').style.display = 'block';
   $('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+function regenerateImage(){
+  currentVariant = (currentVariant + 1) % 4;
+  const theme = currentData?.imageTheme || 'lotus';
+  const caption = currentData?.imageCaption || currentData?.blog?.title || '';
+  renderImage(theme, caption, currentVariant);
+}
+
+function renderImage(theme, caption, variant){
+  const themes = {
+    lotus: drawLotus,
+    eye: drawEye,
+    nature: drawNature,
+    heart: drawHeart,
+    book: drawBook,
+    sun: drawSun,
+    water: drawWater
+  };
+  const drawFn = themes[theme] || drawLotus;
+  const svg = drawFn(caption, variant);
+  $('imagePreview').innerHTML = svg;
+}
+
+// ============= SVG THEMES (1080x1080) =============
+
+function baseSvg(inner, caption, gradientColors){
+  const [c1, c2] = gradientColors || ['#EDF3EE', '#DFEAE1'];
+  const cap = (caption || '').substring(0, 60);
+  return `<svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="${c1}"/>
+        <stop offset="1" stop-color="${c2}"/>
+      </linearGradient>
+      <linearGradient id="petal1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8FB0A3"/><stop offset="1" stop-color="#5C897B"/>
+      </linearGradient>
+      <linearGradient id="petal2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#356B60"/><stop offset="1" stop-color="#20463F"/>
+      </linearGradient>
+      <linearGradient id="honey" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#E8CE97"/><stop offset="1" stop-color="#CE9A3B"/>
+      </linearGradient>
+    </defs>
+    <rect width="1080" height="1080" fill="url(#bg)"/>
+    ${inner}
+    <text x="540" y="920" text-anchor="middle" font-family="Spectral, serif" font-size="52" font-weight="500" fill="#20463F">${cap}</text>
+    <text x="540" y="1010" text-anchor="middle" font-family="Manrope, sans-serif" font-size="26" font-weight="600" fill="#CE9A3B" letter-spacing="4">АЙНҰР ҚАЖЫМҰҚАН · ПСИХОЛОГ</text>
+  </svg>`;
+}
+
+function drawLotus(caption, v){
+  const rotations = [0, 15, -10, 25];
+  const rot = rotations[v] || 0;
+  const inner = `
+    <circle cx="540" cy="420" r="180" fill="#F3EAD6" opacity=".4"/>
+    <circle cx="540" cy="420" r="140" fill="#E8CE97" opacity=".5"/>
+    <circle cx="540" cy="360" r="80" fill="url(#honey)"/>
+    <g transform="translate(540 500) rotate(${rot})">
+      <path d="M0 20 C-40 -30 -40 -120 0 -170 C40 -120 40 -30 0 20z" fill="url(#petal2)"/>
+      <path d="M-20 15 C-90 -15 -120 -80 -115 -145 C-55 -125 -15 -75 -10 -15z" fill="url(#petal1)"/>
+      <path d="M20 15 C90 -15 120 -80 115 -145 C55 -125 15 -75 10 -15z" fill="url(#petal1)"/>
+      <path d="M-35 25 C-115 15 -170 -20 -190 -70 C-115 -70 -60 -40 -30 5z" fill="#7FA396" opacity=".85"/>
+      <path d="M35 25 C115 15 170 -20 190 -70 C115 -70 60 -40 30 5z" fill="#7FA396" opacity=".85"/>
+      <ellipse cx="0" cy="35" rx="220" ry="26" fill="#20463F" opacity=".14"/>
+    </g>
+    <circle cx="200" cy="200" r="10" fill="#CE9A3B" opacity=".6"/>
+    <circle cx="880" cy="280" r="8" fill="#7FA396" opacity=".7"/>
+    <circle cx="150" cy="450" r="6" fill="#CE9A3B" opacity=".5"/>
+    <circle cx="920" cy="500" r="12" fill="#E8CE97" opacity=".6"/>`;
+  return baseSvg(inner, caption, ['#EDF3EE', '#DFEAE1']);
+}
+
+function drawEye(caption, v){
+  const inner = `
+    <ellipse cx="540" cy="420" rx="260" ry="140" fill="#fff" stroke="#20463F" stroke-width="6"/>
+    <circle cx="540" cy="420" r="90" fill="url(#petal2)"/>
+    <circle cx="540" cy="420" r="45" fill="#1B2B27"/>
+    <circle cx="560" cy="400" r="15" fill="#fff"/>
+    <path d="M280 420 Q540 240 800 420" stroke="#CE9A3B" stroke-width="4" fill="none" opacity=".6"/>
+    <path d="M280 420 Q540 600 800 420" stroke="#CE9A3B" stroke-width="4" fill="none" opacity=".6"/>
+    <circle cx="200" cy="200" r="10" fill="#CE9A3B" opacity=".6"/>
+    <circle cx="880" cy="280" r="8" fill="#7FA396" opacity=".7"/>`;
+  return baseSvg(inner, caption, ['#E7EFE9', '#CFDDD3']);
+}
+
+function drawNature(caption, v){
+  const inner = `
+    <circle cx="540" cy="380" r="180" fill="#F3EAD6" opacity=".5"/>
+    <path d="M540 700 C540 500 540 350 540 200" stroke="#2C5F55" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M540 400 C450 380 380 320 380 240 C480 250 540 320 545 400z" fill="url(#petal1)"/>
+    <path d="M540 320 C630 300 700 240 700 160 C600 170 540 240 545 320z" fill="url(#petal2)"/>
+    <path d="M540 500 C420 490 340 430 340 340 C460 350 540 420 545 500z" fill="#7FA396"/>
+    <circle cx="540" cy="180" r="35" fill="url(#honey)"/>
+    <circle cx="540" cy="180" r="55" fill="none" stroke="#CE9A3B" stroke-width="3" opacity=".4"/>
+    <ellipse cx="540" cy="720" rx="200" ry="20" fill="#20463F" opacity=".15"/>
+    <circle cx="200" cy="250" r="12" fill="#CE9A3B" opacity=".6"/>
+    <circle cx="880" cy="350" r="10" fill="#7FA396" opacity=".7"/>`;
+  return baseSvg(inner, caption, ['#EDF3EE', '#DFEAE1']);
+}
+
+function drawHeart(caption, v){
+  const inner = `
+    <circle cx="540" cy="400" r="220" fill="#F3EAD6" opacity=".4"/>
+    <path d="M540 620 C440 540 340 440 340 340 C340 260 400 220 460 220 C500 220 530 240 540 280 C550 240 580 220 620 220 C680 220 740 260 740 340 C740 440 640 540 540 620z" fill="url(#honey)"/>
+    <path d="M540 540 C480 480 420 420 420 360 C420 320 450 300 480 300 C505 300 525 315 540 340 C555 315 575 300 600 300 C630 300 660 320 660 360 C660 420 600 480 540 540z" fill="#fff" opacity=".4"/>
+    <circle cx="180" cy="180" r="15" fill="#CE9A3B" opacity=".6"/>
+    <circle cx="900" cy="260" r="10" fill="#7FA396" opacity=".7"/>
+    <path d="M840 140 l6 14 14 2 -10 10 2 14 -12 -6 -12 6 2 -14 -10 -10 14 -2z" fill="#CE9A3B" opacity=".7"/>`;
+  return baseSvg(inner, caption, ['#F0F5F0', '#E7EFE9']);
+}
+
+function drawBook(caption, v){
+  const inner = `
+    <circle cx="540" cy="400" r="200" fill="#F3EAD6" opacity=".4"/>
+    <path d="M300 500 C380 470 460 470 540 500 C620 470 700 470 780 500 L780 560 C700 530 620 530 540 560 C460 530 380 530 300 560 z" fill="#FAF8F3" stroke="#20463F" stroke-width="6" stroke-linejoin="round"/>
+    <line x1="540" y1="500" x2="540" y2="560" stroke="#20463F" stroke-width="6"/>
+    <path d="M540 490 C540 400 540 340 540 260" stroke="#2C5F55" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M540 380 C480 360 440 320 440 260 C500 270 540 320 545 370z" fill="#7FA396"/>
+    <path d="M540 320 C600 300 640 260 640 200 C580 220 540 260 545 320z" fill="#5C897B"/>
+    <path d="M540 180 l10 20 22 2 -16 16 4 22 -20 -12 -20 12 4 -22 -16 -16 22 -2z" fill="url(#honey)"/>
+    <circle cx="200" cy="240" r="10" fill="#E8CE97"/>
+    <circle cx="860" cy="320" r="8" fill="#7FA396" opacity=".9"/>`;
+  return baseSvg(inner, caption, ['#EDF3EE', '#DFEAE1']);
+}
+
+function drawSun(caption, v){
+  const inner = `
+    <circle cx="540" cy="400" r="220" fill="none" stroke="#CE9A3B" stroke-width="2" opacity=".2"/>
+    <circle cx="540" cy="400" r="180" fill="none" stroke="#CE9A3B" stroke-width="2" opacity=".3"/>
+    <circle cx="540" cy="400" r="140" fill="url(#honey)"/>
+    <circle cx="540" cy="400" r="100" fill="#F3EAD6"/>
+    <g stroke="#CE9A3B" stroke-width="6" stroke-linecap="round">
+      <line x1="540" y1="140" x2="540" y2="180"/>
+      <line x1="540" y1="620" x2="540" y2="660"/>
+      <line x1="280" y1="400" x2="320" y2="400"/>
+      <line x1="760" y1="400" x2="800" y2="400"/>
+      <line x1="355" y1="215" x2="380" y2="240"/>
+      <line x1="700" y1="560" x2="725" y2="585"/>
+      <line x1="725" y1="215" x2="700" y2="240"/>
+      <line x1="380" y1="560" x2="355" y2="585"/>
+    </g>
+    <path d="M100 720 Q540 680 980 720 L980 780 L100 780 z" fill="#CFE0D4" opacity=".7"/>
+    <path d="M100 750 Q540 720 980 750 L980 780 L100 780 z" fill="#B9D0C2"/>`;
+  return baseSvg(inner, caption, ['#F3EAD6', '#E8CE97']);
+}
+
+function drawWater(caption, v){
+  const inner = `
+    <circle cx="540" cy="380" r="200" fill="#B9CFC0" opacity=".3"/>
+    <path d="M100 440 Q270 380 440 440 T780 440 T1000 440" stroke="#7FA396" stroke-width="5" fill="none" opacity=".6"/>
+    <path d="M100 500 Q270 440 440 500 T780 500 T1000 500" stroke="#5C897B" stroke-width="5" fill="none" opacity=".7"/>
+    <path d="M100 560 Q270 500 440 560 T780 560 T1000 560" stroke="#2C5F55" stroke-width="5" fill="none" opacity=".8"/>
+    <path d="M100 620 Q270 560 440 620 T780 620 T1000 620" stroke="#20463F" stroke-width="5" fill="none"/>
+    <circle cx="540" cy="300" r="60" fill="url(#honey)" opacity=".8"/>
+    <circle cx="540" cy="300" r="90" fill="none" stroke="#CE9A3B" stroke-width="2" opacity=".4"/>
+    <circle cx="200" cy="200" r="10" fill="#CE9A3B" opacity=".6"/>
+    <circle cx="880" cy="250" r="8" fill="#E8CE97" opacity=".9"/>`;
+  return baseSvg(inner, caption, ['#EDF3EE', '#D6E3D9']);
+}
+
+// ============= DOWNLOAD =============
+
+function downloadImage(){
+  const svgEl = $('imagePreview').querySelector('svg');
+  if(!svgEl) return;
+  const svgData = new XMLSerializer().serializeToString(svgEl);
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1080;
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  const svgBlob = new Blob([svgData], {type:'image/svg+xml;charset=utf-8'});
+  const url = URL.createObjectURL(svgBlob);
+  img.onload = function(){
+    ctx.drawImage(img, 0, 0, 1080, 1080);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(function(blob){
+      const link = document.createElement('a');
+      link.download = 'ainur-post-' + Date.now() + '.png';
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    }, 'image/png');
+  };
+  img.src = url;
 }
 </script>
 </body>
