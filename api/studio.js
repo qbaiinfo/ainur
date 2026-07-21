@@ -3,55 +3,105 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: "API key not configured" });
+  }
+
   try {
     const { topic, tone } = req.body;
-    
     if (!topic) {
-      return res.status(400).json({ error: "Topic is required" });
+      return res.status(400).json({ error: "Topic required" });
     }
 
-    // Themes array
     const themes = ["lotus", "eye", "therapist", "family", "growth", "hope"];
-    const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+    const theme = themes[Math.floor(Math.random() * themes.length)];
 
-    // Fallback JSON - always return this
-    const responseJSON = {
-      blog: {
-        title: topic,
-        body: `${topic} туралы толық психологиялық мәтін. Бұл маңызды тақырып болып табылады. Айнұр Қажымұқан - педагог-психолог, EMDR және КМТ терапевті. Қызмет қазақ тілінде көрсетіледі. Онлайн және офлайн қабылдау қол жетімді.`
-      },
-      instagram: `${topic} - Психолог кеңесі. Өзіңіздің психологиялық сұрақтарыңызға жауап алыңыз. Айнұр Қажымұқан - EMDR терапевті. 🌿 #психолог #терапия #EMDR`,
-      tiktok: `${topic} туралы қысқа видео сценарийі. Психолог Айнұр Қажымұқан психологиялық мәселелер туралы айтады. Балалар, жасөспірімдер және ересектер үшін терапия қызметі.`,
-      facebook: `Психолог Айнұр Қажымұқан: ${topic}\n\nПедагог-психолог, EMDR және КМТ терапевті. Онлайн және офлайн қабылдау. Балаларға ойын терапиясы. Қазақ тілінде қызмет. WhatsApp: +7 747 676 99 08`,
-      hashtags: [
-        "#психолог",
-        "#терапия",
-        "#EMDR",
-        "#психологиялық_көмек",
-        "#wellbeing",
-        "#психолог_алматы",
-        "#КМТ_терапия",
-        "#ойын_терапиясы"
-      ],
-      imageCaption: topic,
-      imageTheme: randomTheme
+    const prompt = `Сен - Айнұр Қажымұқан психолог-кеңесшінің мазмұн көмекшісі. "${topic}" тақырыбы бойынша қазақ тілінде толық мазмұн жаса.
+
+МІНДЕТТІ ФОРМАТ - ТАЗА JSON:
+{
+  "blog": {
+    "title": "тақырыбы (қысқа)",
+    "body": "толық мәтін 200-300 сөз"
+  },
+  "instagram": "Instagram мәтіні",
+  "tiktok": "TikTok сценарийі",
+  "facebook": "Facebook мәтіні",
+  "hashtags": ["#tag1", "#tag2"],
+  "imageCaption": "суреттің мәтіні",
+  "imageTheme": "lotus"
+}
+
+Барлық мәтін ҚАЗАҚ ТІЛ ІНДЕ. Диагноз ұсынба. Ғылыми negіздеуі бар.`;
+
+    const payload = {
+      contents: [{
+        parts: [{ text: prompt }]
+      }],
+      generationConfig: {
+        maxOutputTokens: 2000,
+        temperature: 0.8,
+        responseMimeType: "application/json"
+      }
     };
 
-    return res.status(200).json(responseJSON);
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-goog-api-key": apiKey
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) {
+      throw new Error("Empty response");
+    }
+
+    text = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+    
+    let json = JSON.parse(text);
+    
+    // Ensure all fields exist
+    if (!json.blog) json.blog = { title: topic, body: "Мәтін" };
+    if (!json.instagram) json.instagram = topic;
+    if (!json.tiktok) json.tiktok = topic;
+    if (!json.facebook) json.facebook = topic;
+    if (!json.hashtags) json.hashtags = ["#психолог"];
+    if (!json.imageCaption) json.imageCaption = topic;
+    if (!json.imageTheme) json.imageTheme = theme;
+
+    return res.status(200).json(json);
 
   } catch (error) {
-    // Fallback on any error
+    console.error("AI error:", error.message);
+    
+    // Fallback only if AI fails
+    const themes = ["lotus", "eye", "therapist", "family", "growth", "hope"];
+    const theme = themes[Math.floor(Math.random() * themes.length)];
+    
     return res.status(200).json({
       blog: {
-        title: "Психологиялық қолдау",
-        body: "Айнұр Қажымұқан - педагог-психолог. EMDR, КМТ терапиясы. Онлайн және офлайн қабылдау."
+        title: req.body?.topic || "Психологиялық қолдау",
+        body: "Айнұр Қажымұқан - педагог-психолог. EMDR және КМТ терапевті. Балалар, жасөспірімдер және ересектерге қызмет көрсетеді. Онлайн және офлайн қабылдау."
       },
-      instagram: "Психолог кеңесі. Өзіңіздің сұрақтарыңызға жауап. 🌿",
-      tiktok: "Психологиялық мәселелер туралы видео.",
-      facebook: "Психолог Айнұр Қажымұқан. Өмір сапасын жақсарту үшін қызмет.",
-      hashtags: ["#психолог", "#терапия", "#wellbeing"],
-      imageCaption: "Психологиялық қолдау",
-      imageTheme: ["lotus", "eye", "therapist", "family", "growth", "hope"][Math.floor(Math.random() * 6)]
+      instagram: "Психолог кеңесі",
+      tiktok: "Психологиялық мәселелер",
+      facebook: "Психолог Айнұр Қажымұқан",
+      hashtags: ["#психолог", "#терапия"],
+      imageCaption: req.body?.topic || "Психологиялық қолдау",
+      imageTheme: theme
     });
   }
 }
