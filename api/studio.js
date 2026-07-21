@@ -14,47 +14,44 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const jsonSchema = {
-      blog: { title: "мақала тақырыбы", body: "толық мәтін" },
-      instagram: "Instagram мәтіні",
-      imageCaption: "суреттегі мәтін (қысқа)",
-      tiktok: "TikTok сценарийі",
-      facebook: "Facebook мәтіні",
-      hashtags: ["#хэштег1", "#хэштег2"],
-      imageTheme: "lotus"
-    };
-
     const prompt = `Тақырып: "${topic}"
 Стиль: ${tone}
 
-Осы тақырыпқа қазақ тілінде толық мазмұн жаса.
+ҚАЗАҚ ТІЛІНДЕ толық мазмұн жаса. ТЕК таза JSON бер.
 
-ДӘЛІК ЖАУАП ФОРМАТЫ (JSON SCHEMA):
-${JSON.stringify(jsonSchema, null, 2)}
+FORMAT (МІНДЕТТІ):
+{
+  "blog": {
+    "title": "мақала тақырыбы (10 сөз max)",
+    "body": "толық мақала (200-300 сөз)"
+  },
+  "instagram": "Instagram мәтіні (150 сөз max)",
+  "tiktok": "TikTok сценарийі (100 сөз max)",
+  "facebook": "Facebook мәтіні (150 сөз max)",
+  "hashtags": ["#хэштег1", "#хэштег2", "#хэштег3"],
+  "imageCaption": "суреттің қысқа мәтіні (5-10 сөз)",
+  "imageTheme": "lotus"
+}
 
-Барлық мәтіндер қазақ тілінде болсын, психология тақырыбында жылы, кәсіби, диагноз қоймай.
-
-imageTheme мәні: lotus, eye, nature, heart, book, sun, water ішінен ТЕК біреу таңда.
-
-МАҢЫЗДЫ: Жауап ТЕК таза JSON болсын. Басқа сөз, түсіндірме, markdown ('''\`\`\`), кірісінеме жоқ. ТАМАША JSON ҒАНА.`;
+ЕРЕЖЕ: Жауап ТІЛДІ JSON болсын, барлығы қазақ, ешқандай английс сөз жоқ.`;
 
     const payload = {
       systemInstruction: { 
         parts: [{ 
-          text: system + "\n\nҚАТІ ЕРЕЖЕ: ЖАУАП ТЕК ТАЗА JSON БОЛСЫН. ЕШҚАНДАЙ КІРІСПЕ, ТҮСІНДІРМЕ, MARKDOWN. ДӘЛІК JSON ҒАНА." 
+          text: system + "\n\nМІНДЕТТІ: Жауап ТЕК таза JSON болсын. Ешқандай markdown,説明, кіріспе. ДӘЛІК JSON ҒАНА." 
         }] 
       },
       contents: [{
         parts: [{ text: prompt }]
       }],
       generationConfig: { 
-        maxOutputTokens: 3000,
-        temperature: 0.7,
+        maxOutputTokens: 2000,
+        temperature: 0.8,
         responseMimeType: "application/json"
       }
     };
 
-    const r = await fetch(
+    const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
       {
         method: "POST",
@@ -66,55 +63,75 @@ imageTheme мәні: lotus, eye, nature, heart, book, sun, water ішінен Т
       }
     );
 
-    const data = await r.json();
+    const data = await response.json();
     
-    if (!r.ok) {
-      return res.status(r.status).json({ error: data.error?.message || `API ${r.status}` });
+    if (!response.ok) {
+      return res.status(response.status).json({ error: data.error?.message || `API ${response.status}` });
     }
     
     let text = (data.candidates?.[0]?.content?.parts?.[0]?.text || "").trim();
     
     if (!text) {
-      return res.status(500).json({ error: "Empty response from API" });
+      return res.status(500).json({ error: "Empty response from Gemini" });
     }
 
-    // Cleanup markdown wrappers
-    text = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
-    
-    // Extract JSON object
+    // Aggressive cleanup
+    text = text
+      .replace(/^```json\s*/gi, '')
+      .replace(/^```\s*/gi, '')
+      .replace(/```\s*$/gi, '')
+      .trim();
+
+    // Remove any leading/trailing junk
+    text = text.replace(/^[^{]*/, '').replace(/[^}]*$/, '');
+
+    // Try to parse
     let json;
     try {
       json = JSON.parse(text);
     } catch (e1) {
-      // Try finding braces
-      const firstBrace = text.indexOf('{');
-      const lastBrace = text.lastIndexOf('}');
-      if (firstBrace >= 0 && lastBrace > firstBrace) {
-        const candidate = text.substring(firstBrace, lastBrace + 1);
+      // Try to extract JSON object
+      const match = text.match(/\{[\s\S]*\}/);
+      if (!match) {
+        return res.status(500).json({ error: "No JSON found in response", raw: text.substring(0, 200) });
+      }
+
+      try {
+        json = JSON.parse(match[0]);
+      } catch (e2) {
+        // Last attempt: clean up common issues
+        let cleaned = match[0];
+        
+        // Fix unescaped quotes inside strings
+        cleaned = cleaned.replace(/([^\\])"([^"]*)"([^\\])/g, '$1\\"$2\\"$3');
+        
+        // Fix newlines
+        cleaned = cleaned.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+        
         try {
-          json = JSON.parse(candidate);
-        } catch (e2) {
+          json = JSON.parse(cleaned);
+        } catch (e3) {
           return res.status(500).json({ 
-            error: "Invalid JSON from API: " + e2.message,
-            raw: text.substring(0, 300)
+            error: "Invalid JSON: " + e2.message,
+            sample: match[0].substring(0, 300)
           });
         }
-      } else {
-        return res.status(500).json({ error: "No JSON object found in response" });
       }
     }
 
-    // Ensure required fields exist
-    if (!json.blog) json.blog = { title: "", body: "" };
-    if (!json.instagram) json.instagram = "";
-    if (!json.tiktok) json.tiktok = "";
-    if (!json.facebook) json.facebook = "";
-    if (!json.hashtags) json.hashtags = [];
-    if (!json.imageCaption) json.imageCaption = json.blog.title || "";
+    // Ensure all required fields
+    if (!json.blog) json.blog = { title: topic, body: "Жүктеліп жатыр..." };
+    if (!json.blog.title) json.blog.title = topic;
+    if (!json.blog.body) json.blog.body = "";
+    if (!json.instagram) json.instagram = json.blog.body.substring(0, 150);
+    if (!json.tiktok) json.tiktok = json.blog.body.substring(0, 100);
+    if (!json.facebook) json.facebook = json.blog.body.substring(0, 150);
+    if (!json.hashtags) json.hashtags = ["#психолог", "#терапия", "#EMDR"];
+    if (!json.imageCaption) json.imageCaption = json.blog.title;
     if (!json.imageTheme) json.imageTheme = "lotus";
 
     return res.status(200).json(json);
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: "Server error: " + err.message });
   }
 }
