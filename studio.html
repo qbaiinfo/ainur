@@ -193,8 +193,7 @@ function checkPass(){
 
 /* GEMINI CONFIG */
 const CONFIG = {
-  geminiEndpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
-  geminiKey: "AQ.Ab8RN6KHqQj2cQ9fmMnXK_EwIFGmxHkH17Wh36NSuICIN-tJ4Q"
+  aiEndpoint: "/api/studio"
 };
 
 const $ = id => document.getElementById(id);
@@ -227,20 +226,14 @@ async function generate(){
 
   try{
     const payload = {
-      contents: [{
-        role: "user",
-        parts: [{
-          text: `Тақырып: "${topic}". Стиль: ${tone}. Осы тақырыпқа толық мазмұн жаса.`
-        }]
-      }],
-      systemInstruction: { parts: [{ text: sys }] },
-      generationConfig: { maxOutputTokens: 1500 }
+      topic: topic,
+      tone: tone,
+      system: sys
     };
-
-    const res = await fetch(
+    const res = await fetch(CONFIG.aiEndpoint, {
       CONFIG.geminiEndpoint + '?key=' + CONFIG.geminiKey,
       {
-        method: 'POST',
+        method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       }
