@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
 Осы тақырыпқа қазақ тілінде толық мазмұн жаса.
 
-МАҢЫЗДЫ: Жауапты ТЕК JSON форматында бер, басқа ешнәрсе жазба (markdown, backtick, түсіндірме де жоқ). Формат:
+МАҢЫЗДЫ: Жауапты ТЕК JSON форматында бер, басқа ешнәрсе жазба. Формат:
 {"blog":{"title":"...","body":"..."},"instagram":"...","tiktok":"...","facebook":"...","hashtags":["#tag1","#tag2"]}`;
 
     const payload = {
@@ -34,22 +34,51 @@ export default async function handler(req, res) {
       }
     };
 
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
-    
-    const r = await fetch(url, {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey
-      },
-      body: JSON.stringify(payload),
-    });
+    // Try both endpoints for compatibility
+    const endpoints = [
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`
+    ];
 
-    const data = await r.json();
-    
-    if (!r.ok) {
-      return res.status(r.status).json({ 
-        error: data.error?.message || `API error ${r.status}`,
+    let lastError = null;
+    let data = null;
+
+    for (const url of endpoints) {
+      try {
+        // Try header-based auth first
+        let r = await fetch(url, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey
+          },
+          body: JSON.stringify(payload),
+        });
+
+        // If that fails, try query parameter auth
+        if (!r.ok && r.status === 401) {
+          r = await fetch(url + `?key=${apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+        }
+
+        data = await r.json();
+
+        if (r.ok) {
+          break; // Success, exit loop
+        } else {
+          lastError = data.error?.message || `API ${r.status}`;
+        }
+      } catch (e) {
+        lastError = e.message;
+      }
+    }
+
+    if (!data || data.error) {
+      return res.status(500).json({ 
+        error: lastError || "All endpoints failed",
         details: data 
       });
     }
@@ -58,29 +87,24 @@ export default async function handler(req, res) {
     
     if (!text) {
       return res.status(500).json({ 
-        error: "Empty response from API",
+        error: "Empty response",
         details: data 
       });
     }
 
     text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-    
     const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      text = jsonMatch[0];
-    }
+    if (jsonMatch) text = jsonMatch[0];
     
-    let json;
     try {
-      json = JSON.parse(text);
+      const json = JSON.parse(text);
+      return res.status(200).json(json);
     } catch (e) {
       return res.status(500).json({ 
         error: "Invalid JSON: " + e.message, 
         raw: text.substring(0, 500) 
       });
     }
-
-    return res.status(200).json(json);
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
