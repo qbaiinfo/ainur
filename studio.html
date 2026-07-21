@@ -1,379 +1,115 @@
 <!DOCTYPE html>
 <html lang="kk">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Мазмұн студиясы — Айнұр Қажымұқан</title>
-<meta name="robots" content="noindex" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232C5F55'/%3E%3Cpath d='M16 24c0-5 0-8 0-8m0 0c-3-1-5-3-5-6 3 0 5 2 5 4m0 2c3-1 5-3 5-6-3 0-5 2-5 4' stroke='%23CE9A3B' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Мазмұн студиясы</title><meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  :root{
-    --ink:#1B2B27;--evergreen:#2C5F55;--evergreen-deep:#20463F;--sage:#7FA396;
-    --mist:#E7EFE9;--mist-2:#F0F5F0;--paper:#FAF8F3;--paper-2:#F4F0E7;
-    --honey:#CE9A3B;--honey-soft:#E8CE97;--line:#DCE4DD;--radius:18px;
-    --shadow:0 18px 50px -24px rgba(27,43,39,.35);
-  }
-  *{box-sizing:border-box;}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
-  h1,h2,h3{font-family:"Spectral",serif;font-weight:500;line-height:1.2;margin:0;}
-  .wrap{max-width:1060px;margin:0 auto;padding:0 22px;}
-  a{color:var(--evergreen);}
-  .top{background:rgba(250,248,243,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;}
-  .top-in{display:flex;align-items:center;justify-content:space-between;height:66px;}
-  .brand{display:flex;align-items:center;gap:.55em;font-family:"Spectral";font-weight:600;font-size:1.05rem;}
-  .back{font-size:.9rem;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:.4em;}
-  .hero{padding:40px 0 8px;}
-  .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--evergreen);}
-  .hero h1{font-size:clamp(1.8rem,4vw,2.6rem);margin:.35em 0;}
-  .hero p{color:#4a5a55;max-width:60ch;}
-
-  .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);margin-top:24px;}
-  label{display:block;font-size:.82rem;font-weight:600;color:var(--evergreen-deep);margin-bottom:6px;}
-  textarea,input,select{width:100%;padding:.75em .9em;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:.98rem;color:var(--ink);background:var(--paper);}
-  textarea:focus,input:focus,select:focus{outline:none;border-color:var(--evergreen);}
-  textarea{resize:vertical;min-height:90px;}
-  .row{display:grid;grid-template-columns:1fr 200px;gap:14px;align-items:end;}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font-weight:600;font-size:1rem;padding:.8em 1.4em;border-radius:100px;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s;font-family:inherit;}
-  .btn-primary{background:var(--evergreen);color:#fff;width:100%;}
-  .btn-primary:hover{transform:translateY(-2px);background:var(--evergreen-deep);}
-  .btn-primary:disabled{opacity:.6;cursor:wait;transform:none;}
-  .btn-ghost{background:var(--paper-2);color:var(--evergreen);border:1.5px solid var(--line);font-size:.85rem;padding:.5em 1em;}
-  .btn-ghost:hover{border-color:var(--evergreen);}
-  .btn-honey{background:var(--honey);color:#2B2410;}
-  .btn-honey:hover{transform:translateY(-2px);}
-
-  .hint{font-size:.82rem;color:var(--sage);margin-top:10px;}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
-  .chip{background:var(--mist);border:1px solid var(--line);border-radius:100px;padding:.4em .9em;font-size:.85rem;font-weight:600;color:var(--evergreen-deep);cursor:pointer;transition:.15s;}
-  .chip:hover{background:var(--evergreen);color:#fff;border-color:var(--evergreen);}
-
-  #results{display:none;margin-top:10px;}
-  #results.show{display:block;}
-  .sec-title{font-family:"Spectral";font-size:1.35rem;margin:34px 0 14px;display:flex;align-items:center;gap:.5em;}
-  .sec-title .ic{width:32px;height:32px;border-radius:9px;background:var(--mist);display:flex;align-items:center;justify-content:center;color:var(--evergreen);}
-
-  .out{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;position:relative;}
-  .out h3{font-size:1.2rem;margin-bottom:.5em;}
-  .out .body{white-space:pre-wrap;color:#33433e;font-size:.98rem;}
-  .copy{position:absolute;top:14px;right:14px;}
-  .platforms{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
-  .pcard{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;position:relative;display:flex;flex-direction:column;}
-  .pcard .ph{display:flex;align-items:center;gap:.5em;font-weight:700;font-size:.95rem;margin-bottom:12px;}
-  .pcard .ph .badge{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;}
-  .ig{background:linear-gradient(45deg,#C13584,#E1306C,#F77737);}
-  .tt{background:#111;}
-  .fb{background:#1877F2;}
-  .pcard .body{white-space:pre-wrap;font-size:.92rem;color:#33433e;flex:1;}
-
-  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
-  .tag{background:var(--mist-2);border:1px solid var(--line);border-radius:8px;padding:.3em .7em;font-size:.82rem;color:var(--evergreen);}
-
-  /* visuals */
-  .viz{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start;}
-  .viz .controls .field{margin-bottom:14px;}
-  .fmt-toggle{display:flex;gap:8px;margin-bottom:14px;}
-  .fmt-toggle button{flex:1;padding:.6em;border:1.5px solid var(--line);background:#fff;border-radius:10px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--ink);}
-  .fmt-toggle button.active{background:var(--evergreen);color:#fff;border-color:var(--evergreen);}
-  .canvas-hold{background:var(--mist-2);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;justify-content:center;}
-  #preview{width:100%;max-width:300px;height:auto;border-radius:10px;box-shadow:var(--shadow);}
-
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--evergreen-deep);color:#fff;padding:.7em 1.3em;border-radius:100px;font-size:.9rem;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:50;}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-  .err{background:#fdecec;border:1px solid #f3b6b6;color:#8a2b2b;border-radius:12px;padding:.8em 1em;font-size:.9rem;margin-top:14px;display:none;}
-  .err.show{display:block;}
-  .spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  @media(max-width:820px){.row{grid-template-columns:1fr;}.platforms{grid-template-columns:1fr;}.viz{grid-template-columns:1fr;}}
+:root{--ink:#1B2B27;--evergreen:#2C5F55;--honey:#CE9A3B;--line:#DCE4DD;--paper:#FAF8F3;--mist:#E7EFE9;}
+*{box-sizing:border-box;}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;font-size:16px;}
+h1,h2,h3{font-family:"Spectral",serif;margin:0;}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px;}
+.top{background:rgba(250,248,243,.9);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;}
+.top-in{display:flex;align-items:center;justify-content:space-between;height:66px;}
+.brand{display:flex;align-items:center;gap:.55em;font-family:"Spectral";font-weight:600;}
+.back{font-size:.9rem;text-decoration:none;display:inline-flex;align-items:center;gap:.4em;}
+.hero{padding:40px 0;}h1{font-size:2rem;margin:.2em 0;}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:24px;}
+label{display:block;font-size:.82rem;font-weight:600;color:#20463F;margin-bottom:6px;}
+textarea,input,select{width:100%;padding:.75em .9em;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:.98rem;color:var(--ink);background:var(--paper);}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--evergreen);}
+textarea{resize:vertical;min-height:90px;}
+.row{display:grid;grid-template-columns:1fr 200px;gap:14px;align-items:end;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font-weight:600;padding:.8em 1.4em;border-radius:100px;border:0;cursor:pointer;font-family:inherit;}
+.btn-primary{background:var(--evergreen);color:#fff;width:100%;}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-primary:disabled{opacity:.6;cursor:wait;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.chip{background:var(--mist);border:1px solid var(--line);border-radius:100px;padding:.4em .9em;font-size:.85rem;font-weight:600;color:#20463F;cursor:pointer;}
+.chip:hover{background:var(--evergreen);color:#fff;}
+.err{display:none;color:#8a2b2b;background:#fdecec;border:1px solid #f3b6b6;padding:.8em;border-radius:10px;margin-top:14px;font-size:.9rem;}
+.err.show{display:block;}
+.out{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:24px;position:relative;}
+.out h3{font-size:1.2rem;margin-bottom:.5em;}
+.body{white-space:pre-wrap;color:#33433e;font-size:.98rem;}
+.copy{position:absolute;top:14px;right:14px;}
+.platforms{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px;}
+.pcard{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;}
+.tag{background:var(--mist);border:1px solid var(--line);border-radius:8px;padding:.3em .7em;font-size:.82rem;color:#20463F;margin-right:6px;margin-top:6px;}
+#results{display:none;}
+@media(max-width:820px){.row{grid-template-columns:1fr;}.platforms{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
-<div class="top"><div class="wrap top-in">
-  <span class="brand">
-    <svg width="30" height="30" viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="#2C5F55"/><path d="M16 25c0-6 0-9 0-9m0 0c-3.4-1-5.6-3.4-5.6-6.8 3.4 0 5.6 2.2 5.6 4.6m0 2.2c3.4-1 5.6-3.4 5.6-6.8-3.4 0-5.6 2.2-5.6 4.6" stroke="#E8CE97" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
-    Мазмұн студиясы
-  </span>
-  <a class="back" href="index.html">← Сайтқа оралу</a>
-</div></div>
-
+<div class="top"><div class="wrap top-in"><span class="brand">📝 Мазмұн студиясы</span><a class="back" href="index.html">← Сайтқа оралу</a></div></div>
 <div class="wrap">
-  <div class="hero">
-    <span class="eyebrow">Тек ішкі қолданысқа</span>
-    <h1>Бір тақырыптан — толық мазмұн</h1>
-    <p>Тақырыпты жазыңыз. AI сізге блог мақаласын, Instagram, TikTok және Facebook үшін жеке мәтіндерді дайындап, брендке сай сурет (пост және story) жасап береді.</p>
-  </div>
-
-  <div class="panel">
-    <div class="row">
-      <div>
-        <label for="topic">Тақырып немесе қысқаша идея</label>
-        <textarea id="topic" placeholder="Мысалы: Емтихан алдындағы алаңдаушылықпен қалай күресуге болады?"></textarea>
-      </div>
-      <div>
-        <label for="tone">Стиль</label>
-        <select id="tone">
-          <option value="жылы әрі қолдаушы">Жылы әрі қолдаушы</option>
-          <option value="ақпараттық әрі кәсіби">Ақпараттық / кәсіби</option>
-          <option value="шабыттандырушы">Шабыттандырушы</option>
-          <option value="қарапайым әрі түсінікті">Қарапайым / түсінікті</option>
-        </select>
-        <div style="height:12px"></div>
-        <button class="btn btn-primary" id="genBtn" onclick="generate()">✨ AI-мен жасау</button>
-      </div>
-    </div>
-    <div class="chips" id="chips">
-      <span class="chip" onclick="setTopic(this)">Мазасыздықпен күресудің 5 әдісі</span>
-      <span class="chip" onclick="setTopic(this)">Өзіне сенімділікті қалай арттыруға болады</span>
-      <span class="chip" onclick="setTopic(this)">EMDR терапиясы дегеніміз не?</span>
-      <span class="chip" onclick="setTopic(this)">Балаңыздың мазасыздығын қалай байқауға болады</span>
-      <span class="chip" onclick="setTopic(this)">Күйзелістен (burnout) шығу жолдары</span>
-    </div>
-    <div class="hint">💡 Кеңес: тақырып нақтырақ болса, мазмұн да сапалырақ шығады.</div>
-    <div class="err" id="err"></div>
-  </div>
-
-  <div id="results">
-    <!-- BLOG -->
-    <div class="sec-title"><span class="ic">📝</span> Блог мақаласы</div>
-    <div class="out" id="blogOut">
-      <button class="btn btn-ghost copy" onclick="copyText('blogCopy',this)">Көшіру</button>
-      <h3 id="blogTitle"></h3>
-      <div class="body" id="blogBody"></div>
-    </div>
-
-    <!-- SOCIAL -->
-    <div class="sec-title"><span class="ic">📣</span> Әлеуметтік желілерге</div>
-    <div class="platforms">
-      <div class="pcard">
-        <div class="ph"><span class="badge ig"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="#fff" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.3" fill="#fff"/></svg></span> Instagram</div>
-        <div class="body" id="igBody"></div>
-        <button class="btn btn-ghost" style="margin-top:12px" onclick="copyText('igBody',this)">Көшіру</button>
-      </div>
-      <div class="pcard">
-        <div class="ph"><span class="badge tt"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M16 3c.3 2.1 1.6 3.7 3.7 4v2.7c-1.4.1-2.7-.3-3.8-1v5.9c0 3.4-2.7 5.9-6 5.9a5.8 5.8 0 0 1 0-11.6c.3 0 .6 0 1 .1v2.9c-.3-.1-.6-.2-1-.2a2.9 2.9 0 1 0 3 2.9V3z"/></svg></span> TikTok</div>
-        <div class="body" id="ttBody"></div>
-        <button class="btn btn-ghost" style="margin-top:12px" onclick="copyText('ttBody',this)">Көшіру</button>
-      </div>
-      <div class="pcard">
-        <div class="ph"><span class="badge fb"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M14 8h3V4h-3c-2.2 0-4 1.8-4 4v2H7v4h3v8h4v-8h3l1-4h-4V8c0-.6.4-1 1-1z"/></svg></span> Facebook</div>
-        <div class="body" id="fbBody"></div>
-        <button class="btn btn-ghost" style="margin-top:12px" onclick="copyText('fbBody',this)">Көшіру</button>
-      </div>
-    </div>
-    <div class="tags" id="tags"></div>
-
-    <!-- VISUAL -->
-    <div class="sec-title"><span class="ic">🎨</span> Брендке сай сурет</div>
-    <div class="out">
-      <div class="viz">
-        <div class="controls">
-          <div class="fmt-toggle">
-            <button id="fSquare" class="active" onclick="setFormat('square')">Пост · 1:1</button>
-            <button id="fStory" onclick="setFormat('story')">Story · 9:16</button>
-          </div>
-          <div class="field"><label for="cvTitle">Сурет тақырыбы</label><input id="cvTitle" oninput="drawPreview()" /></div>
-          <div class="field"><label for="cvSub">Қосымша жол</label><input id="cvSub" oninput="drawPreview()" /></div>
-          <div class="field"><label for="cvMood">Реңк</label>
-            <select id="cvMood" onchange="drawPreview()">
-              <option value="calm">Тыныш (жасыл)</option>
-              <option value="warm">Жылы (бал)</option>
-              <option value="hopeful">Үміт (ашық)</option>
-              <option value="deep">Терең (қою)</option>
-            </select>
-          </div>
-          <button class="btn btn-honey" style="width:100%" onclick="downloadImage()">⤓ PNG жүктеп алу</button>
-          <div class="hint">Сурет 1080px сапада жүктеледі — Instagram/TikTok/Facebook-қа дайын.</div>
-        </div>
-        <div class="canvas-hold">
-          <canvas id="preview" width="540" height="540"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="hero"><h1>Бір тақырыптан — толық мазмұн</h1><p>Taqyrыp жаз, AI блог + Instagram + TikTok + Facebook мәтіндерін жасап береді.</p></div>
+<div class="panel">
+<div class="row">
+<div><label for="topic">Тақырып</label><textarea id="topic" placeholder="Мысалы: EMDR терапиясы дегеніміз не?"></textarea></div>
+<div><label for="tone">Стиль</label><select id="tone"><option value="жылы әрі қолдаушы">Жылы әрі қолдаушы</option><option value="ақпараттық">Ақпараттық</option><option value="шабыттандырушы">Шабыттандырушы</option></select><div style="height:12px"></div>
+<button class="btn btn-primary" id="genBtn" onclick="generate()">✨ AI-мен жасау</button></div>
 </div>
-
-<div class="toast" id="toast"></div>
-<div id="blogCopy" style="display:none"></div>
-
+<div class="chips"><span class="chip" onclick="setTopic(this)">Мазасыздықпен күресудің 5 әдісі</span><span class="chip" onclick="setTopic(this)">EMDR терапиясы дегеніміз не?</span></div>
+<div class="err" id="err"></div>
+</div>
+<div id="results">
+<div class="out"><button class="btn copy" style="padding:.5em 1em;font-size:.85rem" onclick="copyText('blogBody',this)">Көшіру</button><h3 id="blogTitle"></h3><div class="body" id="blogBody"></div></div>
+<h2 style="margin-top:40px">Әлеуметтік желілер</h2>
+<div class="platforms">
+<div class="pcard"><b>📷 Instagram</b><div class="body" id="igBody"></div><button class="btn" style="margin-top:12px;padding:.5em 1em;font-size:.85rem;background:var(--honey);color:#2B2410" onclick="copyText('igBody',this)">Көшіру</button></div>
+<div class="pcard"><b>♪ TikTok</b><div class="body" id="ttBody"></div><button class="btn" style="margin-top:12px;padding:.5em 1em;font-size:.85rem;background:var(--honey);color:#2B2410" onclick="copyText('ttBody',this)">Көшіру</button></div>
+<div class="pcard"><b>f Facebook</b><div class="body" id="fbBody"></div><button class="btn" style="margin-top:12px;padding:.5em 1em;font-size:.85rem;background:var(--honey);color:#2B2410" onclick="copyText('fbBody',this)">Көшіру</button></div>
+</div>
+<div id="tags" style="margin-top:14px"></div>
+</div>
+</div>
 <script>
-/* ===== БАПТАУ ===== */
-const CONFIG = {
-  aiEndpoint: "https://api.anthropic.com/v1/messages", // Vercel-де "/api/chat" деп өзгертіңіз
-  aiModel: "claude-sonnet-4-6",
-  brandName: "Айнұр Қажымұқан",
-  brandHandle: "@psiholog_almaty"   // Instagram/TikTok атын осында жазыңыз
-};
-
+const CONFIG = { aiEndpoint: "/api/studio" };
 const $ = id => document.getElementById(id);
-function toast(t){const el=$('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800);}
-function setTopic(el){$('topic').value=el.textContent;$('topic').focus();}
-
-function copyText(id,btn){
-  const el=$(id); const txt = el.textContent||el.innerText;
-  navigator.clipboard.writeText(txt).then(()=>{const o=btn.textContent;btn.textContent='✓ Көшірілді';setTimeout(()=>btn.textContent=o,1400);});
+function setTopic(el){ $('topic').value = el.textContent; }
+function copyText(id, btn){
+  const txt = $(id).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const o = btn.textContent;
+    btn.textContent = '✓ Көшірілді';
+    setTimeout(() => btn.textContent = o, 1400);
+  });
 }
-
-/* ===== AI генерация ===== */
 async function generate(){
-  const topic=$('topic').value.trim();
-  const tone=$('tone').value;
-  if(!topic){toast('Алдымен тақырып жазыңыз');return;}
-  const btn=$('genBtn'); btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Жасалуда…';
+  const topic = $('topic').value.trim();
+  const tone = $('tone').value;
+  if(!topic){ alert('Тақырып жазыңыз'); return; }
+  const btn = $('genBtn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Жасалуда…';
   $('err').classList.remove('show');
-
-  const sys = `Сен — Айнұр Қажымұқан атты психолог-кеңесшінің мазмұн көмекшісісің. Барлық мәтінді САПАЛЫ ҚАЗАҚ тілінде жаз. Психология тақырыбына сай — жылы, ғылыми негізделген, бірақ қарапайым тілде. Диагноз қойма, дәрі ұсынба. Әр платформаның стиліне бейімде: Instagram — эмоционалды әрі қысқа, TikTok — қысқа видео сценарийі (ілмек + айтылатын сөз), Facebook — толығырақ әрі әңгімелесу үлгісінде.
-
-ТЕК JSON қайтар, басқа мәтін жазба, Markdown қолданба. Формат:
-{
- "blog": {"title": "тартымды тақырып", "body": "4-6 абзацтан тұратын мақала"},
- "instagram": "1-2 қысқа абзац + чақыру (call to action)",
- "tiktok": "🎬 Ілмек: ...\\n\\nСценарий: 3-4 қысқа сөйлем",
- "facebook": "әңгімелесу үлгісіндегі пост",
- "hashtags": ["#хэштег", "..."],
- "cover": {"title": "3-5 сөзден тұратын қысқа айдар", "subtitle": "1 қысқа жол", "mood": "calm|warm|hopeful|deep"}
-}`;
-
   try{
-    const res=await fetch(CONFIG.aiEndpoint,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:CONFIG.aiModel,max_tokens:1000,system:sys,
-        messages:[{role:'user',content:`Тақырып: "${topic}". Стиль: ${tone}. Осы тақырыпқа толық мазмұн жаса.`}]
-      })
+    const res = await fetch(CONFIG.aiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic, tone, system: 'JSON қайтар' })
     });
-    const data=await res.json();
-    let raw=(data.content||[]).map(b=>b.text||'').join('\n').trim();
-    raw=raw.replace(/```json|```/g,'').trim();
-    const j=JSON.parse(raw);
-    render(j);
+    if(!res.ok) throw new Error(`API ${res.status}`);
+    const j = await res.json();
+    $('blogTitle').textContent = j.blog?.title || '';
+    $('blogBody').textContent = j.blog?.body || '';
+    $('igBody').textContent = j.instagram || '';
+    $('ttBody').textContent = j.tiktok || '';
+    $('fbBody').textContent = j.facebook || '';
+    const tags = $('tags');
+    tags.innerHTML = '';
+    (j.hashtags || []).forEach(h => tags.innerHTML += `<span class="tag">${h}</span>`);
+    $('results').style.display = 'block';
   }catch(e){
-    $('err').textContent='Мазмұн жасау сәтсіз аяқталды. Қайта көріңіз (немесе Vercel-де /api/chat қосыңыз).';
+    $('err').textContent = `Қате: ${e.message}`;
     $('err').classList.add('show');
   }finally{
-    btn.disabled=false; btn.innerHTML='✨ AI-мен жасау';
+    btn.disabled = false;
+    btn.innerHTML = '✨ AI-мен жасау';
   }
 }
-
-function render(j){
-  $('blogTitle').textContent=j.blog?.title||'';
-  $('blogBody').textContent=j.blog?.body||'';
-  $('blogCopy').textContent=(j.blog?.title||'')+'\n\n'+(j.blog?.body||'');
-  $('igBody').textContent=j.instagram||'';
-  $('ttBody').textContent=j.tiktok||'';
-  $('fbBody').textContent=j.facebook||'';
-  const tags=$('tags'); tags.innerHTML='';
-  (j.hashtags||[]).forEach(h=>{const s=document.createElement('span');s.className='tag';s.textContent=h;tags.appendChild(s);});
-  $('cvTitle').value=j.cover?.title||j.blog?.title||'';
-  $('cvSub').value=j.cover?.subtitle||'';
-  if(j.cover?.mood)$('cvMood').value=j.cover.mood;
-  $('results').classList.add('show');
-  drawPreview();
-  $('results').scrollIntoView({behavior:'smooth'});
-}
-
-/* ===== Сурет (canvas) ===== */
-let FORMAT='square';
-function setFormat(f){FORMAT=f;$('fSquare').classList.toggle('active',f==='square');$('fStory').classList.toggle('active',f==='story');drawPreview();}
-
-const MOODS={
-  calm:{bg1:'#2C5F55',bg2:'#20463F',accent:'#E8CE97',text:'#FAF8F3',sub:'#CDE0D7'},
-  warm:{bg1:'#CE9A3B',bg2:'#A9761F',accent:'#20463F',text:'#2B2410',sub:'#3d3216'},
-  hopeful:{bg1:'#E7EFE9',bg2:'#CFE0D4',accent:'#CE9A3B',text:'#20463F',sub:'#4a5a55'},
-  deep:{bg1:'#1B2B27',bg2:'#20463F',accent:'#E8CE97',text:'#FAF8F3',sub:'#9DB8AE'}
-};
-
-function drawCard(ctx,W,H,scale){
-  const m=MOODS[$('cvMood').value]||MOODS.calm;
-  const title=$('cvTitle').value||'Тақырып';
-  const sub=$('cvSub').value||'';
-  const pad=70*scale;
-
-  // background gradient
-  const g=ctx.createLinearGradient(0,0,W,H);
-  g.addColorStop(0,m.bg1);g.addColorStop(1,m.bg2);
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-
-  // decorative botanical circles
-  ctx.globalAlpha=.12;ctx.fillStyle=m.accent;
-  ctx.beginPath();ctx.arc(W*0.85,H*0.15,W*0.28,0,7);ctx.fill();
-  ctx.beginPath();ctx.arc(W*0.1,H*0.9,W*0.22,0,7);ctx.fill();
-  ctx.globalAlpha=1;
-
-  // leaf motif (top-left)
-  ctx.strokeStyle=m.accent;ctx.lineWidth=4*scale;ctx.lineCap='round';ctx.globalAlpha=.55;
-  ctx.beginPath();ctx.moveTo(pad,pad);ctx.quadraticCurveTo(pad+40*scale,pad-30*scale,pad+70*scale,pad+10*scale);ctx.stroke();
-  ctx.globalAlpha=1;
-  // accent bar
-  ctx.fillStyle=m.accent;ctx.fillRect(pad,H*0.42,60*scale,6*scale);
-
-  // title (wrapped)
-  ctx.fillStyle=m.text;ctx.textBaseline='top';
-  const titleSize=(FORMAT==='story'?66:60)*scale;
-  ctx.font=`600 ${titleSize}px Spectral, serif`;
-  const maxW=W-pad*2;
-  const lines=wrap(ctx,title,maxW);
-  let y=H*0.44;
-  lines.forEach(ln=>{ctx.fillText(ln,pad,y);y+=titleSize*1.16;});
-
-  // subtitle
-  if(sub){
-    ctx.fillStyle=m.sub;ctx.font=`500 ${30*scale}px Manrope, sans-serif`;
-    y+=14*scale;
-    wrap(ctx,sub,maxW).forEach(ln=>{ctx.fillText(ln,pad,y);y+=38*scale;});
-  }
-
-  // footer: logo mark + name + handle
-  const fy=H-pad-4*scale;
-  // logo square
-  ctx.fillStyle=m.accent;roundRect(ctx,pad,fy-42*scale,42*scale,42*scale,10*scale);ctx.fill();
-  ctx.strokeStyle=m.bg2;ctx.lineWidth=3*scale;
-  ctx.beginPath();ctx.moveTo(pad+21*scale,fy-8*scale);ctx.lineTo(pad+21*scale,fy-24*scale);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(pad+21*scale,fy-18*scale);ctx.quadraticCurveTo(pad+10*scale,fy-20*scale,pad+10*scale,fy-32*scale);ctx.quadraticCurveTo(pad+20*scale,fy-32*scale,pad+21*scale,fy-22*scale);ctx.stroke();
-  ctx.fillStyle=m.text;ctx.textBaseline='middle';
-  ctx.font=`700 ${26*scale}px Manrope, sans-serif`;
-  ctx.fillText(CONFIG.brandName,pad+56*scale,fy-28*scale);
-  ctx.fillStyle=m.sub;ctx.font=`500 ${22*scale}px Manrope, sans-serif`;
-  ctx.fillText('Педагог-психолог · '+CONFIG.brandHandle,pad+56*scale,fy-4*scale);
-  ctx.textBaseline='top';
-}
-
-function wrap(ctx,text,maxW){
-  const words=String(text).split(' ');const lines=[];let line='';
-  words.forEach(w=>{const t=line?line+' '+w:w;if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=w;}else line=t;});
-  if(line)lines.push(line);return lines;
-}
-function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
-
-function drawPreview(){
-  const c=$('preview');
-  const ratio=FORMAT==='story'?(16/9):1;
-  const w=540,h=Math.round(540*ratio);
-  c.width=w;c.height=h;
-  const ctx=c.getContext('2d');
-  drawCard(ctx,w,h,0.5);
-}
-
-async function downloadImage(){
-  await document.fonts.ready;
-  const size=1080;
-  const W=size,H=FORMAT==='story'?1920:1080;
-  const c=document.createElement('canvas');c.width=W;c.height=H;
-  const ctx=c.getContext('2d');
-  drawCard(ctx,W,H,1);
-  c.toBlob(b=>{
-    const url=URL.createObjectURL(b);
-    const a=document.createElement('a');
-    a.href=url;a.download=`aynur-${FORMAT}-${Date.now()}.png`;a.click();
-    URL.revokeObjectURL(url);
-    toast('Сурет жүктелді ✓');
-  },'image/png');
-}
-
-// draw an initial empty preview once fonts ready
-document.fonts.ready.then(drawPreview);
 </script>
 </body>
 </html>
