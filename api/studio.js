@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -15,11 +14,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const prompt = `Taqyrыp: "${topic}". Стиль: ${tone}.
+    const prompt = `Тақырып: "${topic}". Стиль: ${tone}.
 
-ÖNEMLİ: SADECE JSON döndür, hiçbir şey yazma!
-Format:
-{"blog":{"title":"...","body":"..."},"instagram":"...","tiktok":"...","facebook":"...","hashtags":["#tag"]}`;
+Осы тақырыпқа қазақ тілінде толық мазмұн жаса.
+
+МАҢЫЗДЫ: Жауапты ТЕК JSON форматында бер, басқа ешнәрсе жазба (markdown, backtick, түсіндірме де жоқ). Формат:
+{"blog":{"title":"...","body":"..."},"instagram":"...","tiktok":"...","facebook":"...","hashtags":["#tag1","#tag2"]}`;
 
     const payload = {
       systemInstruction: { parts: [{ text: system }] },
@@ -27,31 +27,57 @@ Format:
         role: "user",
         parts: [{ text: prompt }]
       }],
-      generationConfig: { maxOutputTokens: 1500 }
+      generationConfig: { 
+        maxOutputTokens: 2000,
+        temperature: 0.7,
+        responseMimeType: "application/json"
+      }
     };
 
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      }
-    );
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
+      },
+      body: JSON.stringify(payload),
+    });
 
     const data = await r.json();
-    const text = (data.candidates?.[0]?.content?.parts?.[0]?.text || "").trim();
+    
+    if (!r.ok) {
+      return res.status(r.status).json({ 
+        error: data.error?.message || `API error ${r.status}`,
+        details: data 
+      });
+    }
+    
+    let text = (data.candidates?.[0]?.content?.parts?.[0]?.text || "").trim();
     
     if (!text) {
-      return res.status(500).json({ error: "Empty response from API" });
+      return res.status(500).json({ 
+        error: "Empty response from API",
+        details: data 
+      });
     }
 
-    // Try to parse as JSON
+    text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+    
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      text = jsonMatch[0];
+    }
+    
     let json;
     try {
       json = JSON.parse(text);
     } catch (e) {
-      return res.status(500).json({ error: "Invalid JSON from API", raw: text });
+      return res.status(500).json({ 
+        error: "Invalid JSON: " + e.message, 
+        raw: text.substring(0, 500) 
+      });
     }
 
     return res.status(200).json(json);
